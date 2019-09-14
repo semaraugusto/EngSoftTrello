@@ -1,5 +1,7 @@
 from tkinter import *
-import sqlite3
+
+
+
 
 class Application:
     def __init__(self, master=None):
@@ -24,41 +26,35 @@ class Application:
         self.titulo["font"] = ("Arial", "10", "bold")
         self.titulo.pack()
   
-        self.nomeLabel = Label(self.segundoContainer,text="Nome", font=self.fontePadrao)
+        self.nomeLabel = Label(self.segundoContainer,text="Nome da Estoria", font=self.fontePadrao)
         self.nomeLabel.pack(side=LEFT)
   
         self.nome = Entry(self.segundoContainer)
-        self.nome["width"] = 30
         self.nome["font"] = self.fontePadrao
         self.nome.pack(side=LEFT)
   
-        self.senhaLabel = Label(self.terceiroContainer, text="Senha", font=self.fontePadrao)
-        self.senhaLabel.pack(side=LEFT)
+        self.estoria = Label(self.terceiroContainer, text="Descricao da Estoria", font=self.fontePadrao)
+        self.estoria.pack(side=LEFT)
   
-        self.senha = Entry(self.terceiroContainer)
-        self.senha["width"] = 30
-        self.senha["font"] = self.fontePadrao
-        self.senha["show"] = "*"
-        self.senha.pack(side=LEFT)
+        self.descricao = Entry(self.terceiroContainer)
+        self.descricao["font"] = self.fontePadrao
+        self.descricao.pack(side=LEFT)
   
-        self.autenticar = Button(self.quartoContainer)
-        self.autenticar["text"] = "Autenticar"
-        self.autenticar["font"] = ("Calibri", "8")
-        self.autenticar["width"] = 12
-        self.autenticar["command"] = self.verificaSenha
-        self.autenticar.pack()
+        self.salvar = Button(self.quartoContainer)
+        self.salvar["text"] = "Salvar"
+        self.salvar["font"] = ("Calibri", "8")
+        self.salvar["command"] = self.salvaEstoria
+        self.salvar.pack()
   
         self.mensagem = Label(self.quartoContainer, text="", font=self.fontePadrao)
         self.mensagem.pack()
   
     #Método verificar senha
-    def verificaSenha(self):
-        usuario = self.nome.get()
-        senha = self.senha.get()
-        if usuario == "usuariodevmedia" and senha == "dev":
-            self.mensagem["text"] = "Autenticado"
-        else:
-            self.mensagem["text"] = "Erro na autenticação"
+    def salvaEstoria(self):
+        tituloEstoria = self.nome.get()
+        descricaoEstoria = self.descricao.get()
+        
+
   
   
 root = Tk()
