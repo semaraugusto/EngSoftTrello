@@ -1,7 +1,7 @@
 class Estorias(object):
 
 
-	def __init__(self, idestoria = 0, nome = "", descricao = "",  sp = "")
+	def __init__(self, idestoria = 0, nome = " 	", descricao = " ",  sp = " "):
 	  self.info = {}
 	  self.idestoria = idestoria
 	  self.nome = nome
