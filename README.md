@@ -15,14 +15,20 @@ Implementaremos um sistema inspirado no Trello
 	* Criar classe de tarefas com métodos de criação e interação a partir de estórias
 	* Criar e implementar elementos da interface
 
-* Como usuário do sistema, gostaria de dar atributos como story points, comentários, entre outras às tarefas
-	* tualizar tabela de tarefas/criar tabela de atributos
+* Como usuário do sistema, gostaria de dar atributos como story points, comentários, entre outros às tarefas
+	* Atualizar tabela de tarefas/criar tabela de atributos
 	* Adicionar à classe de tarefas métodos e propriedades para lidar com atributos
 	* Criar e implementar elementos da interface
 
 * Como usuário, gostaria de ter como definir uma equipe
+	* Criar tabela e classe de usuários
+	* Criar tabela e classe de equipes
+	* Criar e implementar elementos da interface
 
 * Como usuário, gostaria de atribuir tarefas a equipe
+	* Criar tabela de interação entre equipes e tarefas
+	* Implementar métodos e propriedades nas classes para a interação
+	* Criar e implementar elementos da interface
 
 * Como usuário do sistema eu gostaria de escolher com qual método agil eu vou desenvolver
 
