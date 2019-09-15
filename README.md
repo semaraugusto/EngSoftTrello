@@ -7,13 +7,27 @@ Implementaremos um sistema inspirado no Trello
 *
 
 Como usuário do sistema eu gostaria de criar estórias para meu desenvolvimento
+	- Criar classe e estrutura de banco para armazenar estórias
+	- Implementar métodos de criação de estórias e inserção no banco
+	- Criar e implementar elementos da interface
 
-Como usuário do sistema eu gostaria de atribuir dificuldade  como story points para essa estória
+Como usuário do sistema eu gostaria de quebrar essas estórias em tarefas
+	- Adicionar ao banco tabela de tarefas
+	- Criar classe de tarefas com métodos de criação e interação a partir de estórias
+	- Criar e implementar elementos da interface
 
-Como usuário do sistema eu gostaria de escolher com qual método agil eu vou desenvolver
-
-Como usuário, gostaria de atribuir tarefas a equipe
+Como usuário do sistema, gostaria de dar atributos como story points, comentários, entre outras às tarefas
+	- Atualizar tabela de tarefas/criar tabela de atributos
+	- Adicionar à classe de tarefas métodos e propriedades para lidar com atributos
+	- Criar e implementar elementos da interface
 
 Como usuário, gostaria de ter como definir uma equipe
 
-Como usuário, gostaria de poder adicionar comentários a tarefas
+Como usuário, gostaria de atribuir tarefas a equipe
+
+Como usuário do sistema eu gostaria de escolher com qual método agil eu vou desenvolver
+
+
+# Planinha de Apuração de Horas Trabalhadas
+
+https://docs.google.com/spreadsheets/d/1ZDERnxiEVovHCxXZ3s4NCsrBNWd_TaJ4kIdkCQP8f5w/edit?usp=sharing
