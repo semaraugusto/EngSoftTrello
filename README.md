@@ -30,6 +30,11 @@ Implementaremos um sistema inspirado no Trello
 	* Implementar métodos e propriedades nas classes para a interação
 	* Criar e implementar elementos da interface
 
+* Como usuário, gostaria de poder salvar projetos e acessar projetos diferentes
+	* Criar tabela de projetos no banco
+	* Criar classe e métodos para projetos
+	* Criar e implementar elementos da interface
+
 * Como usuário do sistema eu gostaria de escolher com qual método agil eu vou desenvolver
 
 
