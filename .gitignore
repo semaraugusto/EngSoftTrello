@@ -1,0 +1,5 @@
+#Banco de dados local
+engsoft.db
+
+#pasta de execucao do python
+/__pycache__/

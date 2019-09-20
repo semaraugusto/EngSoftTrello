@@ -1,31 +1,26 @@
-class Estorias(object):
+class Estoria(object):
 
+	def __init__(self, nome, descricao, story_points = -1):
+	
+		self.nome = nome
+		self.descricao = descricao
+		self.story_points = story_points
 
-	def __init__(self, idestoria = 0, nome = " 	", descricao = " ",  sp = " "):
-	  self.info = {}
-	  self.idestoria = idestoria
-	  self.nome = nome
-	  self.descricao = descricao
-	  self.sp = sp
-
-	def insertEstoria(self):
+	def insertBanco(self, banco):
 	 
-		banco = Banco()
 		try:
 
-		  c = banco.conexao.cursor()
+			command = "INSERT INTO estorias(nome, descricao, story_points) VALUES ('{a}', '{b}', {c});"
+			command = command.format(a=self.nome, b=self.descricao, c=self.story_points)
+			banco.executeNonQuery(command)
 
-		  c.execute("insert into estorias (nome,descricao,sp) values ('" + self.nome + "', '" + self.descricao + "', '" + self.sp +"' )")
-
-		  banco.conexao.commit()
-		  c.close()
-
-		  return "Estoria cadastrada com sucesso!"
-		except:
-		  return "Ocorreu um erro no cadastro da estoria"
+			return True
+		except  Exception as e:
+			#raise e
+			return False
 
 	def updateEstoria(self):
- 
+
 		banco = Banco()
 		try:
 
@@ -65,10 +60,10 @@ class Estorias(object):
 			c.execute("select * from usuarios where idestoria = " + idestoria + "  ")
 
 			for linha in c:
-			  self.idestoria = linha[0]
-			  self.nome = linha[1]
-			  self.descricao = linha[2]
-			  self.sp = linha[3]
+				self.idestoria = linha[0]
+				self.nome = linha[1]
+				self.descricao = linha[2]
+				self.sp = linha[3]
 
 			c.close()
 

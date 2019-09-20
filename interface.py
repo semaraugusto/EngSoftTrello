@@ -1,9 +1,10 @@
 from tkinter import *
-
-
-
+from tkinter import messagebox
+from banco import Banco
+from estorias import Estoria
 
 class Application:
+
     def __init__(self, master=None):
         self.fontePadrao = ("Arial", "10")
         self.primeiroContainer = Frame(master)
@@ -48,11 +49,19 @@ class Application:
   
         self.mensagem = Label(self.quartoContainer, text="", font=self.fontePadrao)
         self.mensagem.pack()
+
+        self.banco = Banco()
   
     #Método verificar senha
     def salvaEstoria(self):
-        tituloEstoria = self.nome.get()
-        descricaoEstoria = self.descricao.get()
+        titulo = self.nome.get()
+        descricao = self.descricao.get()
+
+        novaEstoria = Estoria(titulo, descricao)
+        if (novaEstoria.insertBanco(self.banco)):
+            messagebox.showinfo("Aviso", "Estória criada com sucesso!")
+        else:
+            messagebox.showerror("Erro", "Falha na criação da estória!")
         
 
   
