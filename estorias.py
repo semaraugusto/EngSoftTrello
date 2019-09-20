@@ -1,39 +1,34 @@
+import banco
+
 class Estoria(object):
 
 	def __init__(self, nome, descricao, story_points = -1):
 	
+		self.id = banco.proxEstoriaID
 		self.nome = nome
 		self.descricao = descricao
 		self.story_points = story_points
 
-	def insertBanco(self, banco):
+	def insertBanco(self):
 	 
 		try:
 
-			command = "INSERT INTO estorias(nome, descricao, story_points) VALUES ('{a}', '{b}', {c});"
-			command = command.format(a=self.nome, b=self.descricao, c=self.story_points)
-			banco.executeNonQuery(command)
-
+			banco.insertEstoria(self.nome, self.descricao, self.story_points)
 			return True
+
 		except  Exception as e:
 			#raise e
 			return False
 
-	def updateEstoria(self):
+	def updateBanco(self):
 
-		banco = Banco()
 		try:
 
-			c = banco.conexao.cursor()
+			banco.updateEstoria(self.id, self.nome, self.descricao, self.story_points)
+			return True
 
-			c.execute("update estorias set nome = '" + self.nome + "',descricao = '" + self.descricao + "', sp = '" + self.sp + " ")
-
-			banco.conexao.commit()
-			c.close()
-
-			return "Estoria atualizada com sucesso!"
 		except:
-			return "Ocorreu um erro na alteração da estoria"
+			return False
 
 	def deleteEstoria(self):
 
