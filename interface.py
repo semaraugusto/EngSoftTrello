@@ -51,7 +51,23 @@ class Application:
         self.mensagem.pack()
 
         banco.inicializaBanco()
+        self.estorias = []
+        self.carregaEstorias()
   
+
+    def carregaEstorias(self):
+        command = "SELECT * FROM estorias;"
+        result = banco.executeQuery(command)
+
+        for linha in result:
+            self.estorias.append(Estoria(linha[1], linha[2], linha[3], linha[0]))
+
+
+    def printEstorias(self):
+        for estoria in self.estorias:
+            print(str(estoria.id) + ", " + estoria.nome + ", " + estoria.descricao + ", " + str(estoria.story_points))
+
+
     #Método verificar senha
     def salvaEstoria(self):
         titulo = self.nome.get()
@@ -62,6 +78,12 @@ class Application:
             messagebox.showinfo("Aviso", "Estória criada com sucesso! ID: " + str(novaEstoria.id))
         else:
             messagebox.showerror("Erro", "Falha na criação da estória!")
+
+        self.nome.delete(0, 'end')
+        self.descricao.delete(0, 'end')
+
+        self.estorias.append(novaEstoria)
+        self.printEstorias()
         
 
   

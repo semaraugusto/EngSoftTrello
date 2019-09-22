@@ -2,9 +2,13 @@ import banco
 
 class Estoria(object):
 
-	def __init__(self, nome, descricao, story_points = -1):
+	def __init__(self, nome, descricao, story_points = -1, id = None):
 	
-		self.id = banco.proxEstoriaID
+		if id is None:
+			self.id = banco.proxEstoriaID
+		else:
+			self.id = id
+		
 		self.nome = nome
 		self.descricao = descricao
 		self.story_points = story_points

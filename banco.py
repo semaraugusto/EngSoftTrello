@@ -31,6 +31,20 @@ def executeNonQuery(command):
 	c.close()
 
 
+def executeQuery(command):
+	global conexao
+	result = []
+
+	c = conexao.cursor()
+	c.execute(command)
+
+	for linha in c:
+		result.append(linha)
+
+	c.close()
+	return result
+
+
 def countQuery(tabela):
 	global conexao
 
