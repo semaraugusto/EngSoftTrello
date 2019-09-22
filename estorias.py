@@ -8,7 +8,7 @@ class Estoria(object):
 			self.id = banco.proxEstoriaID
 		else:
 			self.id = id
-		
+
 		self.nome = nome
 		self.descricao = descricao
 		self.story_points = story_points
@@ -34,38 +34,12 @@ class Estoria(object):
 		except:
 			return False
 
-	def deleteEstoria(self):
+	def deleteBanco(self):
 
-		banco = Banco()
 		try:
 
-			c = banco.conexao.cursor()
+			banco.deleteEstoria(self.id)
 
-			c.execute("delete from estorias where idusuario = " + self.idestoria + " ")
-
-			banco.conexao.commit()
-			c.close()
-
-			return "estoria excluída com sucesso!"
+			return True
 		except:
-			return "Ocorreu um erro na exclusão da estoria"
-
-	def selectEstoria(self, idusuario):
-		banco = Banco()
-		try:
-
-			c = banco.conexao.cursor()
-
-			c.execute("select * from usuarios where idestoria = " + idestoria + "  ")
-
-			for linha in c:
-				self.idestoria = linha[0]
-				self.nome = linha[1]
-				self.descricao = linha[2]
-				self.sp = linha[3]
-
-			c.close()
-
-			return "Busca feita com sucesso!"
-		except:
-			return "Ocorreu um erro na busca da estoria"
+			return False
