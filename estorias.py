@@ -38,7 +38,7 @@ class Estoria(object):
 
 		try:
 
-			banco.deleteEstoria(self.id)
+			banco.deleteByID("estorias", self.id)
 
 			return True
 		except:

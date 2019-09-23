@@ -3,6 +3,8 @@ import sqlite3
 conexao = None
 proxEstoriaID = 0
 proxTarefaID = 0
+proxUsuarioID = 0
+proxEquipeID = 0
 
 tabelaEstorias = """CREATE TABLE IF NOT EXISTS estorias (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,6 +18,16 @@ tabelaTarefas =  """CREATE TABLE IF NOT EXISTS tarefas (
 					nome TEXT,
 					descricao TEXT);"""
 
+tabelaUsuarios = """CREATE TABLE IF NOT EXISTS usuarios (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					id_equipe INTEGER,
+					nome TEXT)"""
+
+tabelaEquipes =  """CREATE TABLE IF NOT EXISTS equipes (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					nome TEXT,
+					descricao TEXT)"""
+
 def createTables():
 	global conexao
 
@@ -23,6 +35,8 @@ def createTables():
 
 	c.execute(tabelaEstorias)
 	c.execute(tabelaTarefas)
+	c.execute(tabelaUsuarios)
+	c.execute(tabelaEquipes)
 	
 	conexao.commit()
 	c.close()
@@ -68,13 +82,13 @@ def countQuery(tabela):
 	return int(ret)
 
 
-def selectAllQuery(tabela, id):
+def selectAll(tabela, id):
 
 	command = "SELECT * FROM {a} WHERE id = {b};"
 	command = command.format(a=tabela, b=id)
 	return executeQuery(command)
 
-def deleteByIDQuery(tabela, id):
+def deleteByID(tabela, id):
 
 	command = "DELETE FROM {a} WHERE id = {b};"
 	command = command.format(a=tabela, b=id)
@@ -82,13 +96,15 @@ def deleteByIDQuery(tabela, id):
 
 
 def inicializaBanco():
-	global conexao, proxEstoriaID
+	global conexao, proxEstoriaID, proxTarefaID, proxUsuarioID, proxEquipeID
 
 	conexao = sqlite3.connect('engsoft.db')
 	createTables()
 
 	proxEstoriaID = countQuery('estorias') + 1
 	proxTarefaID = countQuery('tarefas') + 1
+	proxUsuarioID = countQuery('usuarios') + 1
+	proxEquipeID = countQuery('equipes') + 1
 
 
 def insertEstoria(nome, descricao, story_points):
@@ -122,4 +138,38 @@ def updateTarefa(id, id_estoria, nome, descricao):
 
 	command = "UPDATE tarefas SET id_estoria = {a}, nome = '{b}', descricao = '{c}' WHERE id = {d};"
 	command = command.format(a=id_estoria, b=nome, c=descricao, d=id)
+	executeNonQuery(command)
+
+
+def insertUsuario(id_equipe, nome):
+	global proxUsuarioID
+
+	command = "INSERT INTO usuarios(id_equipe, nome) VALUES ({a}, '{b}');"
+	command = command.format(a=id_equipe, b=nome)
+	executeNonQuery(command)
+
+	proxUsuarioID = proxUsuarioID + 1
+
+
+def updateUsuario(id, id_equipe, nome):
+
+	command = "UPDATE usuarios SET id_equipe = {a}, nome = '{b}' WHERE id = {c};"
+	command = command.format(a=id_equipe, b=nome, c=id)
+	executeNonQuery(command)
+
+
+def insertTarefa(nome, descricao):
+	global proxEquipeID
+
+	command = "INSERT INTO equipes(nome, descricao) VALUES ('{a}', '{b}');"
+	command = command.format(a=nome, b=descricao)
+	executeNonQuery(command)
+
+	proxEquipeID = proxEquipeID + 1
+
+
+def updateTarefa(id, nome, descricao):
+
+	command = "UPDATE equipes SET nome = '{a}', descricao = '{b}' WHERE id = {c};"
+	command = command.format(a=nome, b=descricao, c=id)
 	executeNonQuery(command)

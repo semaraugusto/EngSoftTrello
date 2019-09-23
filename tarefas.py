@@ -39,7 +39,7 @@ class Tarefa(object):
 
 		try:
 			
-			banco.deleteTarefa(self.id)
+			banco.deleteByID("tarefas", self.id)
 
 			return True
 		except:
