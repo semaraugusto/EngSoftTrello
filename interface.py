@@ -5,7 +5,7 @@ from estorias import Estoria
 import random
 import banco
 
-class Application(tk.Tk):
+class SampleApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -30,7 +30,7 @@ class Application(tk.Tk):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
-
-app = Application()
+  
+app = SampleApp()
 app.geometry("800x600")
 app.mainloop()
