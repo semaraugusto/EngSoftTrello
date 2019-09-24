@@ -1,20 +1,20 @@
 import banco
 
 class Tarefa(object):
-    def __init__(self, id_estoria, nome, descricao, done, id_equipe=None, id=None):
-
-        if id is None:
-            self.id = banco.proxTarefaID
-        else:
-            self.id = id
-
-        if id_equipe is not None:
-            self.id_equipe = id_equipe
-
+    def __init__(self, id_estoria, nome, descricao, done, id_equipe=None, id_tarefa=None, comments=None):
         self.id_estoria = id_estoria
         self.nome = nome
         self.descricao = descricao
         self.done = done
+        self.id_equipe = id_equipe
+
+        if id_tarefa is None:
+            self.id_tarefa = banco.proxTarefaID
+        else:
+            self.id_tarefa = id_tarefa
+
+        self.comments=comments
+
 
     def insertTarefaBanco(self):
         try:
@@ -23,7 +23,8 @@ class Tarefa(object):
                 self.nome,
                 self.descricao,
                 self.done,
-                self.id_equipe)
+                self.id_equipe,
+                self.comments)
             return True
 
         except Exception as e:
@@ -34,12 +35,13 @@ class Tarefa(object):
 
         try:
             banco.updateTarefa(
-                self.id,
+                self.id_tarefa,
                 self.id_estoria,
                 self.nome,
                 self.descricao,
                 self.done,
-                self.id_equipe)
+                self.id_equipe,
+                self.comments)
             return True
 
         except BaseException:
@@ -48,7 +50,7 @@ class Tarefa(object):
     def deleteTarefaBanco(self):
 
         try:
-            banco.deleteByID("tarefas", self.id)
+            banco.deleteByID("tarefas", self.id_tarefa)
             return True
 
         except BaseException:

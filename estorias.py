@@ -2,14 +2,15 @@ import banco
 
 class Estoria():
     def __init__(self, nome, descricao, story_points=-1, id_estoria=None):
+        self.nome = nome
+        self.descricao = descricao
+        self.story_points = story_points
+
         if id is None:
             self.id_estoria = banco.proxEstoriaID
         else:
             self.id_estoria = id_estoria
 
-        self.nome = nome
-        self.descricao = descricao
-        self.story_points = story_points
 
     def insertBanco(self):
         try:
