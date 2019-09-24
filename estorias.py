@@ -1,45 +1,43 @@
 import banco
 
-class Estoria(object):
+class Estoria():
+    def __init__(self, nome, descricao, story_points=-1, id_estoria=None):
+        if id is None:
+            self.id_estoria = banco.proxEstoriaID
+        else:
+            self.id_estoria = id_estoria
 
-	def __init__(self, nome, descricao, story_points = -1, id = None):
-	
-		if id is None:
-			self.id = banco.proxEstoriaID
-		else:
-			self.id = id
+        self.nome = nome
+        self.descricao = descricao
+        self.story_points = story_points
 
-		self.nome = nome
-		self.descricao = descricao
-		self.story_points = story_points
+    def insertBanco(self):
+        try:
+            banco.insertEstoria(self.nome, self.descricao, self.story_points)
+            return True
 
-	def insertBanco(self):
-	 
-		try:
+        except Exception as e:
+            #raise e
+            return False
 
-			banco.insertEstoria(self.nome, self.descricao, self.story_points)
-			return True
+    def updateBanco(self):
+        try:
+            banco.updateEstoria(
+                self.id_estoria,
+                self.nome,
+                self.descricao,
+                self.story_points)
+            return True
 
-		except  Exception as e:
-			#raise e
-			return False
+        except BaseException:
+            return False
 
-	def updateBanco(self):
+    def deleteBanco(self):
+        try:
+            banco.deleteByID("estorias", self.id_estoria)
+            return True
 
-		try:
+        except BaseException:
+            return False
 
-			banco.updateEstoria(self.id, self.nome, self.descricao, self.story_points)
-			return True
-
-		except:
-			return False
-
-	def deleteBanco(self):
-
-		try:
-
-			banco.deleteByID("estorias", self.id)
-
-			return True
-		except:
-			return False
+    
