@@ -51,7 +51,7 @@ class InitialPage(tk.Frame):
         self.options_count = 0        
 
         self.createOption(self.controller, "Create new project", self.createNewProject)
-        #self.createOption(self.controller, "Delete project", self.deleteProject)
+        self.createOption(self.controller, "Delete project", self.deleteProject)
 
         self.projects_list_box = tk.Listbox(controller, width=70, height=35, selectmode=tk.BROWSE)
         for i in range(0, len(self.projects)):
@@ -93,6 +93,27 @@ class InitialPage(tk.Frame):
 
         submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmited(win, name_entry, description_entry))
         submit_button.grid(row=2, column=1)
+
+    def deleteYesButton(self, widget, project_selected):
+        #delete project function
+        widget.destroy()
+
+    def deleteNoButton(self, widget):
+        #delete project function
+        widget.destroy()
+
+    def deleteProject(self):
+        win = tk.Toplevel()
+        win.wm_title("Window")
+
+        project_selected = self.projects_list_box.get(tk.ACTIVE)
+        label= tk.Label(win, text="Are you sure you want to delete '{}'?".format(project_selected),font=10)
+        label.grid(row=0)
+
+        yes_button = tk.Button(win, text="yes", command= lambda: self.deleteYesButton(win, project_selected))
+        yes_button.grid(row=4, column=1)
+        no_button = tk.Button(win, text="no", command= lambda: self.deleteNoButton(win))
+        no_button.grid(row=4, column=2)
         
         #banco.inicializaBanco()
         #self.estorias = []
