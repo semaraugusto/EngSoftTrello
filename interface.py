@@ -1,93 +1,36 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
+from tkinter import font  as tkfont
 from estorias import Estoria
+import random
 import banco
 
-class Application:
+class Application(tk.Tk):
 
-    def __init__(self, master=None):
-        self.fontePadrao = ("Arial", "10")
-        self.primeiroContainer = Frame(master)
-        self.primeiroContainer["pady"] = 10
-        self.primeiroContainer.pack()
-  
-        self.segundoContainer = Frame(master)
-        self.segundoContainer["padx"] = 20
-        self.segundoContainer.pack()
-  
-        self.terceiroContainer = Frame(master)
-        self.terceiroContainer["padx"] = 20
-        self.terceiroContainer.pack()
-  
-        self.quartoContainer = Frame(master)
-        self.quartoContainer["pady"] = 20
-        self.quartoContainer.pack()
-  
-        self.titulo = Label(self.primeiroContainer, text="Sistema de Auxilio em Desenvolvimento de Software")
-        self.titulo["font"] = ("Arial", "10", "bold")
-        self.titulo.pack()
-  
-        self.nomeLabel = Label(self.segundoContainer,text="Nome da Estoria", font=self.fontePadrao)
-        self.nomeLabel.pack(side=LEFT)
-  
-        self.nome = Entry(self.segundoContainer)
-        self.nome["font"] = self.fontePadrao
-        self.nome.pack(side=LEFT)
-  
-        self.estoria = Label(self.terceiroContainer, text="Descricao da Estoria", font=self.fontePadrao)
-        self.estoria.pack(side=LEFT)
-  
-        self.descricao = Entry(self.terceiroContainer)
-        self.descricao["font"] = self.fontePadrao
-        self.descricao.pack(side=LEFT)
-  
-        self.salvar = Button(self.quartoContainer)
-        self.salvar["text"] = "Salvar"
-        self.salvar["font"] = ("Calibri", "8")
-        self.salvar["command"] = self.salvaEstoria
-        self.salvar.pack()
-  
-        self.mensagem = Label(self.quartoContainer, text="", font=self.fontePadrao)
-        self.mensagem.pack()
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
 
-        banco.inicializaBanco()
-        self.estorias = []
-        self.carregaEstorias()
-  
+        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
 
-    def carregaEstorias(self):
-        command = "SELECT * FROM estorias;"
-        result = banco.executeQuery(command)
+        # the container is where we'll stack a bunch of frames
+        # on top of each other, then the one we want visible
+        # will be raised above the others
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
 
-        for linha in result:
-            self.estorias.append(Estoria(linha[1], linha[2], linha[3], linha[0]))
+        self.frames = {}
+        #self.frames["InitialPage"] = InitialPage(container, self)
+        #self.frames["InitialPage"].grid(row=0, column=0, sticky="nsew")
 
+        #self.show_frame("InitialPage")
 
-    def printEstorias(self):
-        for estoria in self.estorias:
-            print(str(estoria.id) + ", " + estoria.nome + ", " + estoria.descricao + ", " + str(estoria.story_points))
+    def show_frame(self, page_name):
+        '''Show a frame for the given page name'''
+        frame = self.frames[page_name]
+        frame.tkraise()
 
-
-    #Método verificar senha
-    def salvaEstoria(self):
-        titulo = self.nome.get()
-        descricao = self.descricao.get()
-
-        novaEstoria = Estoria(titulo, descricao)
-        if (novaEstoria.insertBanco()):
-            messagebox.showinfo("Aviso", "Estória criada com sucesso! ID: " + str(novaEstoria.id))
-        else:
-            messagebox.showerror("Erro", "Falha na criação da estória!")
-
-        self.nome.delete(0, 'end')
-        self.descricao.delete(0, 'end')
-
-        self.estorias.append(novaEstoria)
-        self.printEstorias()
-        
-
-  
-  
-root = Tk()
-Application(root)
-root.mainloop()
+app = Application()
+app.geometry("800x600")
+app.mainloop()
