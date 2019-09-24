@@ -15,8 +15,11 @@ tabelaEstorias = """CREATE TABLE IF NOT EXISTS estorias (
 tabelaTarefas = """CREATE TABLE IF NOT EXISTS tarefas (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					id_estoria INTEGER,
+					id_equipe INTEGER,
 					nome TEXT,
-					descricao TEXT);"""
+					descricao TEXT,
+					comments TEXT,
+					done BOOLEAN);"""
 
 tabelaUsuarios = """CREATE TABLE IF NOT EXISTS usuarios (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -126,20 +129,30 @@ def updateEstoria(id, nome, descricao, story_points):
     executeNonQuery(command)
 
 
-def insertTarefa(id_estoria, nome, descricao):
+def insertTarefa(id_estoria, nome, descricao, done, id_equipe, comments):
     global proxTarefaID
 
-    command = "INSERT INTO tarefas(id_estoria, nome, descricao) VALUES ({a}, '{b}', '{c}');"
-    command = command.format(a=id_estoria, b=nome, c=descricao)
+	if id_equipe is None:
+		id_equipe = "null"
+	if comments is None:
+		comments = ""
+		
+    command = "INSERT INTO tarefas(id_estoria, id_equipe, nome, descricao, comments, done) VALUES ({a}, {b}, '{c}', '{d}', '{e}', {f});"
+    command = command.format(a=id_estoria, b=id_equipe, c=nome, d=descricao, e=comments, f=done)
     executeNonQuery(command)
 
     proxTarefaID = proxTarefaID + 1
 
 
-def updateTarefa(id, id_estoria, nome, descricao):
+def updateTarefa(id, id_estoria, nome, descricao, done, id_equipe, comments):
 
-    command = "UPDATE tarefas SET id_estoria = {a}, nome = '{b}', descricao = '{c}' WHERE id = {d};"
-    command = command.format(a=id_estoria, b=nome, c=descricao, d=id)
+	if id_equipe is None:
+		id_equipe = "null"
+	if comments is None:
+		comments = ""
+
+    command = "UPDATE tarefas SET id_estoria = {a}, id_equipe = {b}, nome = '{c}', descricao = '{d}', comments = '{e}', done = {f} WHERE id = {g};"
+    command = command.format(a=id_estoria, b=id_equipe, c=nome, d=descricao, e=comments, f=done, g=id)
     executeNonQuery(command)
 
 
