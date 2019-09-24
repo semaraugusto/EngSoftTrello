@@ -39,25 +39,61 @@ class InitialPage(tk.Frame):
 
         self.controller = controller
         self.projects = ["AEDSII-TP1", "COMPILADORESI-TP2", "ENGSOFT-TP3", "OCII-TP0"]
+
         self.initial_page_options = ["Create new project", "Delete project", "Configure project"]
         self.fontePadrao = ("Arial", "10")
-
 
         label = tk.Label(self, font=controller.title_font, pady=1)
         label.pack(fill="x")
 
-        
-        for i in range(0,len(self.initial_page_options)):
-            brightness = 1
-            bg_colour = "#0A6450"
-            option = tk.Button(controller, text=self.initial_page_options[i], fg='White' if brightness < 120 else 'Black', bg=bg_colour)
-            option.place(x = 20, y = 30 + i*50, width=120, height=30)
+        self.options_brightness = "White"
+        self.options_colour = "#0A6450"
+        self.options_count = 0        
+
+        self.createOption(self.controller, "Create new project", self.createNewProject)
+        #self.createOption(self.controller, "Delete project", self.deleteProject)
 
         self.projects_list_box = tk.Listbox(controller, width=70, height=35, selectmode=tk.BROWSE)
         for i in range(0, len(self.projects)):
             self.projects_list_box.insert(i, self.projects[i])
         self.projects_list_box.place(x=200, y=30)
 
+    def createOption(self, widget, option_string, function):
+        option = tk.Button(widget, text=option_string, command=function, fg=self.options_brightness , bg=self.options_colour)
+        option.place(x = 20, y = 30 + self.options_count*50, width=120, height=30)
+        self.options_count += 1
+
+    def getSubmited(self, widget, name_entry, description_entry):
+        name = name_entry.get()
+        description = description_entry.get()
+
+        if name != "" and description != "":
+            #addprojectfunction()
+            name_entry.destroy()
+            description_entry.destroy()
+            widget.destroy()
+        else:
+            Errorlabel = tk.Label(widget, text="Name or description not given", background="red", fg="white")
+            Errorlabel.grid(row=2,column=0)
+
+    def createNewProject(self):
+        win = tk.Toplevel()
+        win.wm_title("Window")
+
+        label= tk.Label(win, text="Project Name",font=10)
+        label.grid(row=0)
+        name_entry = tk.Entry(win)
+        name_entry.grid(row=0, column=1)
+
+
+        label= tk.Label(win, text="Description", font=10)
+        label.grid(row=1)
+        description_entry = tk.Entry(win)
+        description_entry.grid(row=1, column=1)
+
+        submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmited(win, name_entry, description_entry))
+        submit_button.grid(row=2, column=1)
+        
         #banco.inicializaBanco()
         #self.estorias = []
         #self.carregaEstorias()
