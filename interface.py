@@ -150,9 +150,10 @@ class ProjectWindow (tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+
         self.project_name = "Project Name"
         label = tk.Label(self, text=self.project_name, font=("Verdana", 12))
-        label.grid(row=0, column=0)
+        label.grid(row=0, column=0, columnspan=8, rowspan=3)
 
         self.board = ["Stories", "Tasks", "Doing", "Done"]
         self.stories = ["As a user, i want...", "i wish that...", "the system must have..."]
@@ -160,41 +161,97 @@ class ProjectWindow (tk.Frame):
         self.doing = ["Interface for main screen"]
         self.done = ["Create the data base tables"]
 
-        self.stories_label = tk.Label(label, text="Stories")
-        self.stories_label.grid(row=1, column=0)
-        self.stories_list = tk.Listbox(label, width=23, height=30)
-        for i in range(len(self.stories)):
-            self.stories_list.insert(i, "E{}: ".format(i) + self.stories[i])
-        self.stories_list.grid(row=2, column=0)
+        self.list_boxes = {}
 
-        self.tasks_label = tk.Label(label, text="Tasks")
-        self.tasks_label.grid(row=1, column=1)
-        self.tasks_list = tk.Listbox(label, width=23, height=30)
-        for i in range(len(self.tasks)):
-            self.tasks_list.insert(i, "T{}/E{}: ".format(-1, -1) + self.tasks[i])
-        self.tasks_list.grid(row=2, column=1)
+        self.createListBox(self, self.stories, "Stories", 3, 0, "E{}: ")
+        self.createListBox(self, self.tasks, "tasks", 3, 2, "T{}: ", add=False, remove=True)
+        self.createListBox(self, self.doing, "Doing", 3, 4, "T{}: ", add=False, remove=True)
+        self.createListBox(self, self.done, "Done", 3, 6, "T{}: ", add=False, remove=True)
 
-        self.doing_label = tk.Label(label, text="Doing")
-        self.doing_label.grid(row=1, column=2)
-        self.doing_list = tk.Listbox(label, width=23, height=30)
-        for i in range(len(self.doing)):
-            self.doing_list.insert(i, "T{}: ".format(-1) + self.doing[i])
-        self.doing_list.grid(row=2, column=2)
-
-        self.done_label = tk.Label(label, text="Done")
-        self.done_label.grid(row=1, column=3)
-        self.done_list = tk.Listbox(label, width=23, height=30)
-        for i in range(len(self.done)):
-            self.done_list.insert(i, "T{}: ".format(-1) + self.done[i])
-        self.done_list.grid(row=2, column=3)
-
-
-        button1 = tk.Button(label, text="Back to Home", command=lambda: controller.show_frame(InitialPage))
-        button1.grid(row=3, column=0)
+        back_to_home_button = tk.Button(self, text="Back to home", command= lambda: controller.show_frame(InitialPage))
+        back_to_home_button.grid(row=6, column=0, columnspan=6)
         
+    def createListBox(self, widged, array, list_name, r, c, prefix, add=True, remove=True):
+        array_label = tk.Label(widged, text=list_name)
+        array_label.grid(row=r, column=c, columnspan=2)
+        array_list = tk.Listbox(widged, width=23, height=30)
+        for i in range(len(array)):
+            array_list.insert(i, prefix.format(i) + array[i])
+        array_list.grid(row=r+1, column=c, columnspan=2)
+        
+        add_button = None
+        remove_button = None
+
+        if add:
+            add_button = tk.Button(widged, text="Add", width=4, command= lambda: self.createNewProject(list_name))
+            add_button.grid(row=r+2, column=c)
+
+        if remove:
+            remove_button = tk.Button(widged, text="Remove", width=4, command= lambda: self.deleteProject(list_name))
+            remove_button.grid(row=r+2, column=c+1)
+
+        self.list_boxes[list_name] = [array_label, array_list, add_button, remove_button]
 
     def defineProjectName(self, project_name):
         self.project_name = project_name
+
+    # get the new project data given by the user, and 
+    def getSubmited(self, widget, name_entry):
+        name = name_entry.get()
+        if name != "":
+            # addProjectInDataBase()
+            # updateInterfaceData()
+            name_entry.destroy()
+            widget.destroy()
+        else:
+            # popup an error message and keeps the window open
+            Errorlabel = tk.Label(widget, text="description not given", background="red", fg="white")
+            Errorlabel.grid(row=2,column=0)
+
+    def cancelSubmited(self, widget, name_entry):
+        name_entry.destroy()
+        widget.destroy()
+
+    # Create the new project window popup to get the new project data
+    def createNewProject(self, list_selected):
+        win = tk.Toplevel()
+        win.wm_title("Window")
+
+
+        label= tk.Label(win, text=list_selected + ":",font=10)
+        label.grid(row=0)
+        name_entry = tk.Entry(win)
+        name_entry.grid(row=0, column=1)
+
+        submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmited(win, name_entry))
+        submit_button.grid(row=1, column=0)
+
+        submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmited(win, name_entry))
+        submit_button.grid(row=1, column=1)
+
+    def deleteYesButton(self, widget, project_selected):
+        # deleteProjectInDataBase()
+        # updateInterfaceData()
+        widget.destroy()
+
+    def deleteNoButton(self, widget):
+        widget.destroy()
+
+    # Create the delete project window popup
+    def deleteProject(self, list_selected):
+        win = tk.Toplevel()
+        win.wm_title("Window")
+
+        project_selected = self.list_boxes[list_selected][1].get(tk.ACTIVE)
+        label= tk.Label(win, text="Are you sure you want to delete '{}' ?".format(project_selected),font=10)
+        label.grid(row=0)
+
+        yes_button = tk.Button(win, text="yes", command= lambda: self.deleteYesButton(win, project_selected))
+        yes_button.grid(row=4, column=1)
+
+        no_button = tk.Button(win, text="no", command= lambda: self.deleteNoButton(win))
+        no_button.grid(row=4, column=2)
+        
 
 app = Application()
 app.geometry("800x600")
