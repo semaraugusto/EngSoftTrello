@@ -19,7 +19,7 @@ class Application(tk.Tk):
 
         self.frames = {}
 
-        for F in [InitialPage]:#, ProjectWindow, PageTwo):
+        for F in [InitialPage, ProjectWindow]:
 
             frame = F(container, self)
 
@@ -36,7 +36,7 @@ class Application(tk.Tk):
 
     def show_projectFrame(self, project_name):
         print(project_name)
-        frame = self.frames[InitialPage]
+        frame = self.frames[ProjectWindow]
         frame.defineProjectName(project_name)
         frame.tkraise()
 
@@ -144,22 +144,57 @@ class InitialPage(tk.Frame):
 
         no_button = tk.Button(win, text="no", command= lambda: self.deleteNoButton(win))
         no_button.grid(row=4, column=2)
+
+
+class ProjectWindow (tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.project_name = "Project Name"
+        label = tk.Label(self, text=self.project_name, font=("Verdana", 12))
+        label.grid(row=0, column=0)
+
+        self.board = ["Stories", "Tasks", "Doing", "Done"]
+        self.stories = ["As a user, i want...", "i wish that...", "the system must have..."]
+        self.tasks = ["Create methods for insert in data base"]
+        self.doing = ["Interface for main screen"]
+        self.done = ["Create the data base tables"]
+
+        self.stories_label = tk.Label(label, text="Stories")
+        self.stories_label.grid(row=1, column=0)
+        self.stories_list = tk.Listbox(label, width=23, height=30)
+        for i in range(len(self.stories)):
+            self.stories_list.insert(i, "E{}: ".format(i) + self.stories[i])
+        self.stories_list.grid(row=2, column=0)
+
+        self.tasks_label = tk.Label(label, text="Tasks")
+        self.tasks_label.grid(row=1, column=1)
+        self.tasks_list = tk.Listbox(label, width=23, height=30)
+        for i in range(len(self.tasks)):
+            self.tasks_list.insert(i, "T{}/E{}: ".format(-1, -1) + self.tasks[i])
+        self.tasks_list.grid(row=2, column=1)
+
+        self.doing_label = tk.Label(label, text="Doing")
+        self.doing_label.grid(row=1, column=2)
+        self.doing_list = tk.Listbox(label, width=23, height=30)
+        for i in range(len(self.doing)):
+            self.doing_list.insert(i, "T{}: ".format(-1) + self.doing[i])
+        self.doing_list.grid(row=2, column=2)
+
+        self.done_label = tk.Label(label, text="Done")
+        self.done_label.grid(row=1, column=3)
+        self.done_list = tk.Listbox(label, width=23, height=30)
+        for i in range(len(self.done)):
+            self.done_list.insert(i, "T{}: ".format(-1) + self.done[i])
+        self.done_list.grid(row=2, column=3)
+
+
+        button1 = tk.Button(label, text="Back to Home", command=lambda: controller.show_frame(InitialPage))
+        button1.grid(row=3, column=0)
         
-        #banco.inicializaBanco()
-        #self.estorias = []
-        #self.carregaEstorias()
 
-    #def carregaEstorias(self):
-    #    command = "SELECT * FROM estorias;"
-    #    result = banco.executeQuery(command)
-
-    #    for linha in result:
-    #        self.estorias.append(Estoria(linha[1], linha[2], linha[3], linha[0]))
-
-
-    #def printEstorias(self):
-    #    for estoria in self.estorias:
-    #        print(str(estoria.id) + ", " + estoria.nome + ", " + estoria.descricao + ", " + str(estoria.story_points))
+    def defineProjectName(self, project_name):
+        self.project_name = project_name
 
 app = Application()
 app.geometry("800x600")
