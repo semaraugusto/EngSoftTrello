@@ -37,6 +37,9 @@ Implementaremos um sistema inspirado no Trello
 
 * Como usuário do sistema eu gostaria de escolher com qual método agil eu vou desenvolver
 
+# Burndown Chart
+
+![](story_points.png)
 
 # Planinha de Apuração de Horas Trabalhadas
 
