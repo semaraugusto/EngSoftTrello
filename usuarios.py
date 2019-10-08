@@ -1,6 +1,6 @@
 import banco
 
-class Equipe(object):
+class Usuario(object):
 
 	def __init__(self, id_equipe , id_usuario ,nome, id = None):
 	
@@ -36,11 +36,13 @@ class Equipe(object):
 			return False
 
 	def deleteUsuarioBanco(self):
-
 		try:
 			
 			banco.deleteUsuario(self.id)
-
 			return True
 		except:
 			return False
+
+	def changeUsuarioName(self,nome):
+		self.nome = nome
+		self.updateUsuarioBanco()

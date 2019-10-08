@@ -55,3 +55,16 @@ class Tarefa(object):
 
         except BaseException:
             return False
+
+    def changeDescricao(self,descricao):
+        self.descricao = descricao
+        self.updateTarefaBanco()
+
+    def changeName(self,name):
+        self.name = name
+        self.updateTarefaBanco()
+
+    def setDone(self,boolean){
+        self.done = boolean
+        updateTarefaBanco()
+    }

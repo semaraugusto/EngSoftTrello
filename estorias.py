@@ -1,4 +1,5 @@
 import banco
+import tarefas
 
 class Estoria():
     def __init__(self, nome, descricao, story_points=-1, id_estoria=None):
@@ -41,4 +42,19 @@ class Estoria():
         except BaseException:
             return False
 
-    
+    def changeDescricao(self,descricao):
+        self.descricao = descricao
+        self.updateBanco()
+
+    def changeName(self,name):
+        self.name = name
+        self.updateBanco()
+
+    def changeSP(self,sp):
+        self.story_points = sp
+        self.updateBanco()
+
+    def getTarefas(self):
+        command = "SELECT T.nome FROM tarefas T JOIN estorias E ON T.id_estoria = E.(a) VALUES ({a});"
+        command = command.format(a=self.id_estoria)
+        banco.executeQuery(command)

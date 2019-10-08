@@ -173,7 +173,7 @@ def updateUsuario(id, id_equipe, nome):
     executeNonQuery(command)
 
 
-def insertTarefa(nome, descricao):
+def insertEquipe(nome, descricao):
     global proxEquipeID
 
     command = "INSERT INTO equipes(nome, descricao) VALUES ('{a}', '{b}');"
@@ -183,7 +183,7 @@ def insertTarefa(nome, descricao):
     proxEquipeID = proxEquipeID + 1
 
 
-def updateTarefa(id, nome, descricao):
+def updateEquipe(id, nome, descricao):
 
     command = "UPDATE equipes SET nome = '{a}', descricao = '{b}' WHERE id = {c};"
     command = command.format(a=nome, b=descricao, c=id)
