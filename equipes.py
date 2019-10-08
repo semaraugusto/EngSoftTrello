@@ -28,12 +28,9 @@ class Equipe(object):
         except BaseException:
             return False
 
-    def deleteEquipeBanco(self):
+    def deleteBanco(self):
         try:
-            banco.deleteEquipe(self.id)
-
+            banco.deleteByID("equipes", self.id_equipe)
             return True
         except BaseException:
             return False
-
-

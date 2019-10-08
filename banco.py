@@ -131,11 +131,11 @@ def updateEstoria(id, nome, descricao, story_points):
 
 def insertTarefa(id_estoria, nome, descricao, done, id_equipe, comments):
     global proxTarefaID
-    
-	if id_equipe is None:
-		id_equipe = "null"
-	if comments is None:
-		comments = ""
+
+    if id_equipe is None:
+        id_equipe = "null"
+    if comments is None:
+        comments = ""
 		
     command = "INSERT INTO tarefas(id_estoria, id_equipe, nome, descricao, comments, done) VALUES ({a}, {b}, '{c}', '{d}', '{e}', {f});"
     command = command.format(a=id_estoria, b=id_equipe, c=nome, d=descricao, e=comments, f=done)
@@ -151,9 +151,9 @@ def updateTarefa(id, id_estoria, nome, descricao, done, id_equipe, comments):
 	if comments is None:
 		comments = ""
 
-    command = "UPDATE tarefas SET id_estoria = {a}, id_equipe = {b}, nome = '{c}', descricao = '{d}', comments = '{e}', done = {f} WHERE id = {g};"
-    command = command.format(a=id_estoria, b=id_equipe, c=nome, d=descricao, e=comments, f=done, g=id)
-    executeNonQuery(command)
+	command = "UPDATE tarefas SET id_estoria = {a}, id_equipe = {b}, nome = '{c}', descricao = '{d}', comments = '{e}', done = {f} WHERE id = {g};"
+	command = command.format(a=id_estoria, b=id_equipe, c=nome, d=descricao, e=comments, f=done, g=id)
+	executeNonQuery(command)
 
 
 def insertUsuario(id_equipe, nome):
