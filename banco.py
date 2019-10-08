@@ -131,7 +131,7 @@ def updateEstoria(id, nome, descricao, story_points):
 
 def insertTarefa(id_estoria, nome, descricao, done, id_equipe, comments):
     global proxTarefaID
-
+    
 	if id_equipe is None:
 		id_equipe = "null"
 	if comments is None:

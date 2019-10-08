@@ -64,7 +64,7 @@ class Tarefa(object):
         self.name = name
         self.updateTarefaBanco()
 
-    def setDone(self,boolean){
+    def setDone(self,boolean):
         self.done = boolean
-        updateTarefaBanco()
-    }
+        self.updateTarefaBanco()
+    
