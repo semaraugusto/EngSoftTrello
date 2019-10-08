@@ -2,10 +2,11 @@ import banco
 import tarefas
 
 class Estoria():
-    def __init__(self, nome, descricao, story_points=-1, id_estoria=None):
+    def __init__(self, nome, descricao,id_projeto, story_points=-1, id_estoria=None):
         self.nome = nome
         self.descricao = descricao
         self.story_points = story_points
+        self.id_projeto = id_projeto
 
         if id is None:
             self.id_estoria = banco.proxEstoriaID
@@ -15,7 +16,7 @@ class Estoria():
 
     def insertBanco(self):
         try:
-            banco.insertEstoria(self.nome, self.descricao, self.story_points)
+            banco.insertEstoria(self.nome, self.descricao, self.story_points,self.id_projeto)
             return True
 
         except Exception as e:
@@ -28,7 +29,8 @@ class Estoria():
                 self.id_estoria,
                 self.nome,
                 self.descricao,
-                self.story_points)
+                self.story_points,
+                self.id_projeto)
             return True
 
         except BaseException:
