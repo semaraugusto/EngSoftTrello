@@ -89,7 +89,15 @@ def countQuery(tabela):
     return int(ret)
 
 
-def selectAll(tabela, id):
+def selectAll(tabela):
+
+    command = "SELECT * FROM {a};"
+    command = command.format(a=tabela)
+    return executeQuery(command)
+
+
+
+def selectAllbyID(tabela, id):
 
     command = "SELECT * FROM {a} WHERE id = {b};"
     command = command.format(a=tabela, b=id)
@@ -201,6 +209,6 @@ def consultaEstoriasProjeto(id_proejto):
 
 def consultaProjetosUsuario(id_usuario):
 
-	command "SELECT p.* FROM projetos p JOIN usuarios_projetos up ON p.id = up.id_projeto WHERE up.id_usuario = {a};"
+	command = "SELECT p.* FROM projetos p JOIN usuarios_projetos up ON p.id = up.id_projeto WHERE up.id_usuario = {a};"
 	command = command.format(a=id_usuario)
 	return executeQuery(command)
