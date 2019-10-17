@@ -30,8 +30,9 @@ tabelaProjetos = """CREATE TABLE IF NOT EXISTS projetos (
 					nome TEXT)"""
 
 tabelaUsuariosProjetos = """CREATE TABLE IF NOT EXISTS usuarios_projetos (
-							id_usuario INTEGER PRIMARY KEY,
-							id_projeto INTEGER PRIMARY KEY)"""
+							id_usuario INTEGER ,
+							id_projeto INTEGER ,
+                            PRIMARY KEY (id_usuario, id_projeto))"""
 
 
 def createTables():

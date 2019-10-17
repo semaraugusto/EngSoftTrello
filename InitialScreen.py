@@ -15,7 +15,10 @@ class InitialPage(tk.Frame):
         label.pack(pady=10,padx=10)
 
         # getting the projects avaiable
-        self.projects = ["AEDSII-TP1", "COMPILADORESI-TP2", "ENGSOFT-TP3", "OCII-TP0"]
+        # self.projects = ["AEDSII-TP1", "COMPILADORESI-TP2", "ENGSOFT-TP3", "OCII-TP0"]
+        
+        self.projects = executeQuery("SELECT nome FROM projetos;")
+        print (self.projects)
 
         # options visual configurations
         self.options_brightness = "White"

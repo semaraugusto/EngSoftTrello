@@ -31,7 +31,7 @@ class ProjectPage (tk.Frame):
         self.createListBox(self, doing, "Doing", 3, 4, "T{}: ", add=False, remove=True)
         self.createListBox(self, done, "Done", 3, 6, "T{}: ", add=False, remove=True)
 
-        back_to_home_button = tk.Button(self, text="Back to home", command= lambda: controller.show_frame(InitialPage))
+        back_to_home_button = tk.Button(self, text="Back to home", command= lambda: controller.show_initialframe(0))
         back_to_home_button.grid(row=6, column=0, columnspan=6)
         
     def createListBox(self, widged, array, list_name, r, c, prefix, add=True, remove=True):

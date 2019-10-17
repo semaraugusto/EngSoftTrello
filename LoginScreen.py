@@ -18,7 +18,7 @@ class LoginPage(tk.Frame):
         label.grid(row=0)
         name_entry = tk.Entry(win)
         name_entry.grid(row=0, column=1)
-
+        inicializaBanco()
 
         label= tk.Label(win, text="password", font=10)
         label.grid(row=1)
