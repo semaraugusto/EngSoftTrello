@@ -142,14 +142,12 @@ def updateEstoria(id, nome, descricao, story_points):
 
 def insertTarefa(id_estoria, nome, descricao, done):
     global proxTarefaID
+    int_done = 0
+    if done:
+        int_done = 1
 
-    if id_equipe is None:
-        id_equipe = "null"
-    if comments is None:
-        comments = ""
-		
     command = "INSERT INTO tarefas(id_estoria, nome, descricao,done) VALUES ({a}, '{b}', '{c}', {d});"
-    command = command.format(a=id_estoria, b=nome, c=descricao, d=done)
+    command = command.format(a=id_estoria, b=nome, c=descricao, d=int_done)
     executeNonQuery(command)
 
     proxTarefaID = proxTarefaID + 1
@@ -218,7 +216,6 @@ def consultaTarefasEstorias(id_estoria):
 	command = "SELECT * FROM tarefas t WHERE t.id_estoria = {a};"
 	command = command.format(a=id_estoria)
 	return executeQuery(command)
-
 
 
 def consultaProjetosUsuario(id_usuario):

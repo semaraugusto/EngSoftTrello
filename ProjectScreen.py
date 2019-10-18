@@ -19,14 +19,13 @@ class ProjectPage (tk.Frame):
 
         stories = consultaEstoriasProjeto(self.project_id)
         print(stories)
-        tasks = executeQuery("SELECT T.nome FROM estorias E JOIN tarefas T ON E.id = T.id_estoria;")
+        tasks = []
+        for e in stories:
+            task = consultaTarefasEstorias(e[0])
+            if len(task) != 0:
+                tasks += task
         doing = []
         done = []
-        for t in tasks:
-            if t[6]:
-                done.append(t)
-            else:
-                doing.append(t)
 
         self.list_boxes = {}
 
@@ -44,11 +43,11 @@ class ProjectPage (tk.Frame):
         array_list = tk.Listbox(widged, width=23, height=30)
         for i in range(len(array)):
             if list_name == "Stories":
-                print(i, prefix.format(i), array[i][0])
                 array_list.insert(i, prefix.format(i) + array[i][2])
                 array_list.bind("<Double-Button-1>",  lambda x: self.storyWindow(array_list.get(tk.ACTIVE), self.getStoryDescription(array_list.get(tk.ACTIVE)), self.getStoryPoints(array_list.get(tk.ACTIVE))))
             elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
-                array_list.insert(i, prefix.format(i) + array[i][3])
+                print(i, prefix.format(i) ,array)
+                array_list.insert(i, prefix.format(i) + array[i][2])
 
         array_list.grid(row=r+1, column=c, columnspan=2)
         
@@ -56,12 +55,20 @@ class ProjectPage (tk.Frame):
         remove_button = None
 
         if add:
-            add_button = tk.Button(widged, text="Add", width=4, command= lambda: self.createNewStory(list_name))
-            add_button.grid(row=r+2, column=c)
+            if(list_name == "Stories"):
+                add_button = tk.Button(widged, text="Add", width=4, command= lambda: self.createNewStory())
+                add_button.grid(row=r+2, column=c)
+            elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
+                add_button = tk.Button(widged, text="Add", width=4, command= lambda: self.createNewTask())
+                add_button.grid(row=r+2, column=c)
 
         if remove:
-            remove_button = tk.Button(widged, text="Remove", width=4, command= lambda: self.deleteStory(list_name))
-            remove_button.grid(row=r+2, column=c+1)
+            if(list_name == "Stories"):
+                remove_button = tk.Button(widged, text="Remove", width=4, command= lambda: self.deleteStory())
+                remove_button.grid(row=r+2, column=c+1)
+            elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
+                remove_button = tk.Button(widged, text="Remove", width=4, command= lambda: self.deleteTask())
+                remove_button.grid(row=r+2, column=c+1)
 
         self.list_boxes[list_name] = [array_label, array_list, add_button, remove_button]
 
@@ -103,7 +110,7 @@ class ProjectPage (tk.Frame):
         widget.destroy()
 
     # Create the new story window popup to get the new project data
-    def createNewStory(self, list_selected):
+    def createNewStory(self):
         win = tk.Toplevel()
         win.wm_title("Window")
 
@@ -124,6 +131,85 @@ class ProjectPage (tk.Frame):
         submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedStory(win, name_entry, description_entry))
         submit_button.grid(row=2, column=1)
 
+    def getStoryIndex(self, story_name):
+        for i in range(self.list_boxes["Stories"][1].size()):
+            if(self.list_boxes["Stories"][1].get(i) == story_name):
+                return i
+        return 0
+
+    # get the new story data given by the user, and 
+    def getSubmitedTask(self, widget, story_name, name_entry, description_entry):
+        name = name_entry.get()
+        description = description_entry.get("1.0", tk.END)
+        if name != "":
+            list_box = self.list_boxes["Tasks"][1]
+            list_size = list_box.size()
+            list_box.insert(list_size, "E{}/T{}: ".format(self.getStoryIndex(story_name), list_size) + name)
+            story_name = story_name[story_name.find(":")+2:]
+            story_id = getById("estorias", story_name)
+            story = selectAllbyID("estorias", story_id[0][0])
+            print(story, story_id)
+            insertTarefa(story_id[0][0], name, description, False)
+            name_entry.destroy()
+            widget.destroy()
+        else:
+            # popup an error message and keeps the window open
+            Errorlabel = tk.Label(widget, text="description not given", background="red", fg="white")
+            Errorlabel.grid(row=2,column=0)    
+
+    def deleteYesButtonTask(self, widget, list_selected, task_selected):
+        for i in range(list_selected.size()):
+            if(list_selected.get(i) == task_selected):
+                list_selected.delete(i)
+                break
+        task_id = getById("tarefas", task_selected[task_selected.find(":")+2:])[0][0]
+        deleteByID("tarefas", task_id)
+        widget.destroy()
+
+    def deleteNoButton(self, widget):
+        widget.destroy()
+
+    # Create the delete story window popup
+    def deleteTask(self):
+        win = tk.Toplevel()
+        win.wm_title("Window")
+        task_selected = self.list_boxes["Tasks"][1].get(tk.ACTIVE)
+        label= tk.Label(win, text="Are you sure you want to delete '{}' ?".format(task_selected),font=10)
+        label.grid(row=0)
+
+        yes_button = tk.Button(win, text="yes", command= lambda: self.deleteYesButtonTask(win, self.list_boxes["Tasks"][1], task_selected))
+        yes_button.grid(row=4, column=1)
+
+        no_button = tk.Button(win, text="no", command= lambda: self.deleteNoButton(win))
+        no_button.grid(row=4, column=2)
+
+    def createNewTask(self):
+        win = tk.Toplevel()
+        win.wm_title("Window")
+
+        story_selected = self.list_boxes["Stories"][1].get(tk.ACTIVE)
+
+        label= tk.Label(win, text="New task from {}".format(story_selected[story_selected.find(":")+2:]),font=10)
+        label.grid(row=0)
+
+        label= tk.Label(win, text="Task name: ",font=7)
+        label.grid(row=1)
+        name_entry = tk.Entry(win)
+        name_entry.grid(row=1, column=1)
+
+        label = tk.Label(win, text="Description: ",font=10)
+        label.grid(row=2)
+        description_entry = tk.Text(win)
+        description_entry.grid(row=2, column=1)
+
+        submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmitedTask(win, story_selected, name_entry, description_entry))
+        submit_button.grid(row=3, column=0)
+
+        submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedStory(win, name_entry, description_entry))
+        submit_button.grid(row=3, column=1)
+
+
+
     def deleteYesButton(self, widget, list_selected, story_selected):
         for i in range(list_selected.size()):
             if(list_selected.get(i) == story_selected):
@@ -137,14 +223,14 @@ class ProjectPage (tk.Frame):
         widget.destroy()
 
     # Create the delete story window popup
-    def deleteStory(self, list_selected_name):
+    def deleteStory(self):
         win = tk.Toplevel()
         win.wm_title("Window")
-        story_selected = self.list_boxes[list_selected_name][1].get(tk.ACTIVE)
+        story_selected = self.list_boxes["Stories"][1].get(tk.ACTIVE)
         label= tk.Label(win, text="Are you sure you want to delete '{}' ?".format(story_selected),font=10)
         label.grid(row=0)
 
-        yes_button = tk.Button(win, text="yes", command= lambda: self.deleteYesButton(win, self.list_boxes[list_selected_name][1], story_selected))
+        yes_button = tk.Button(win, text="yes", command= lambda: self.deleteYesButton(win, self.list_boxes["Stories"][1], story_selected))
         yes_button.grid(row=4, column=1)
 
         no_button = tk.Button(win, text="no", command= lambda: self.deleteNoButton(win))

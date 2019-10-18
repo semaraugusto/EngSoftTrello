@@ -45,7 +45,7 @@ class InitialPage(tk.Frame):
 
         if name != "":
             insertProjeto(name)
-            self.projects_list_box.insert(self.projects_list_box.size(), name)
+            self.projects_list_box.insert(self.projects_list_box.size(), [name])
             name_entry.destroy()
             widget.destroy()
         else:
