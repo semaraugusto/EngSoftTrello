@@ -30,14 +30,10 @@ class InitialPage(tk.Frame):
         # creating the list of projects that the user have
         self.projects_list_box = tk.Listbox(self, width=70, height=35, selectmode=tk.BROWSE)
         for i in range(0, len(self.projects)):
-            print(self.projects[i])
             self.projects_list_box.insert(i, self.projects[i])
         
         self.projects_list_box.bind("<Double-Button-1>", lambda x: controller.show_projectFrame(self.projects_list_box.get(tk.ACTIVE)))
         self.projects_list_box.place(x=200, y=30)
-
-        #button2 = tk.Button(self, text="Visit Page 2", command=lambda: controller.show_frame(PageTwo))
-        #button2.place()
 
     # function that create the buttons options
     def createOption(self, widget, option_string, function):
@@ -97,7 +93,6 @@ class InitialPage(tk.Frame):
         win.wm_title("Window")
 
         project_selected = self.projects_list_box.get(tk.ACTIVE)
-        print(project_selected)
         label= tk.Label(win, text="Are you sure you want to delete '{}' ?".format(project_selected),font=10)
         label.grid(row=0)
 
