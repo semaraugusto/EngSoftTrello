@@ -124,11 +124,11 @@ def inicializaBanco():
     proxProjetoID = countQuery('projetos') + 1
 
 
-def insertEstoria(nome, descricao, story_points):
+def insertEstoria(id_projeto,nome, descricao, story_points):
     global proxEstoriaID
 
-    command = "INSERT INTO estorias(nome, descricao, story_points) VALUES ('{a}', '{b}', {c});"
-    command = command.format(a=nome, b=descricao, c=story_points)
+    command = "INSERT INTO estorias(id_projeto,nome, descricao, story_points) VALUES ({a}, '{b}', '{c}', {d});"
+    command = command.format(a=id_projeto, b=nome, c=descricao, d=story_points)
     executeNonQuery(command)
 
     proxEstoriaID = proxEstoriaID + 1
