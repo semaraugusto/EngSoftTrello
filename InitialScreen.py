@@ -30,6 +30,7 @@ class InitialPage(tk.Frame):
         # creating the list of projects that the user have
         self.projects_list_box = tk.Listbox(self, width=70, height=35, selectmode=tk.BROWSE)
         for i in range(0, len(self.projects)):
+            print(self.projects[i])
             self.projects_list_box.insert(i, self.projects[i])
         
         self.projects_list_box.bind("<Double-Button-1>", lambda x: controller.show_projectFrame(self.projects_list_box.get(tk.ACTIVE)))
