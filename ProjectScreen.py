@@ -26,7 +26,7 @@ class ProjectPage (tk.Frame):
         self.list_boxes = {}
 
         self.createListBox(self, stories, "Stories", 3, 0, "E{}: ")
-        self.createListBox(self, tasks, "Tasks", 3, 2, "T{}: ", add=False, remove=True)
+        self.createListBox(self, tasks, "Tasks", 3, 2, "T{}: ", add=True, remove=True)
         self.createListBox(self, doing, "Doing", 3, 4, "T{}: ", add=False, remove=True)
         self.createListBox(self, done, "Done", 3, 6, "T{}: ", add=False, remove=True)
 
@@ -66,14 +66,14 @@ class ProjectPage (tk.Frame):
         story_name = story_name[story_name.find(":")+2:]
         story_id = getProjectId("estorias", story_name)
         story = selectAllbyID("estorias", story_id[0][0])
-        return story[0][2]
+        return story[0][3]
 
     def getStoryPoints(self, story_name):
         story_name = story_name[story_name.find(":")+2:]
         story_id = getProjectId("estorias", story_name)
         story = selectAllbyID("estorias", story_id[0][0])
         print(story)
-        return story[0][3]
+        return story[0][4]
 
     # get the new story data given by the user, and 
     def getSubmitedStory(self, widget, name_entry, description_entry):
@@ -147,9 +147,9 @@ class ProjectPage (tk.Frame):
     def changeStory(self, story_selected_name, description_widget, points_widget):
         points = points_widget.get()
         description = description_widget.get("1.0", tk.END)
-        print(story_selected_name, points, description)
         story_name = story_selected_name[story_selected_name.find(":")+2:]
         story_id = getProjectId("estorias", story_name)
+        print(story_id[0][0], story_name, description, points)
         updateEstoria(story_id[0][0], story_name, description, points)
 
 
