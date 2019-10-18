@@ -18,7 +18,6 @@ tabelaTarefas = """CREATE TABLE IF NOT EXISTS tarefas (
 					id_estoria INTEGER,
 					nome TEXT,
 					descricao TEXT,
-					comments TEXT,
 					done BOOLEAN);"""
 
 tabelaUsuarios = """CREATE TABLE IF NOT EXISTS usuarios (
