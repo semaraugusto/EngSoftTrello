@@ -23,7 +23,8 @@ tabelaTarefas = """CREATE TABLE IF NOT EXISTS tarefas (
 
 tabelaUsuarios = """CREATE TABLE IF NOT EXISTS usuarios (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					nome TEXT)"""
+					nome TEXT UNIQUE,
+                    senha TEXT)"""
 
 tabelaProjetos = """CREATE TABLE IF NOT EXISTS projetos (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -167,11 +168,11 @@ def updateTarefa(id, id_estoria, nome, descricao, done, comments):
 	executeNonQuery(command)
 
 
-def insertUsuario(nome):
+def insertUsuario(nome, senha):
     global proxUsuarioID
 
-    command = "INSERT INTO usuarios(nome) VALUES ('{a}');"
-    command = command.format(a=nome)
+    command = "INSERT INTO usuarios(nome, senha) VALUES ('{a}', '{b}');"
+    command = command.format(a=nome, b=senha)
     executeNonQuery(command)
 
     proxUsuarioID = proxUsuarioID + 1
@@ -200,11 +201,13 @@ def updateProjeto(id, nome):
     command = command.format(a=nome, b=id)
     executeNonQuery(command)
 
+
 def getProjectId(tabela, nome):
     command = "SELECT id FROM {a} WHERE nome = '{b}';"
     command = command.format(a=tabela, b=nome)
     print(command)
     return executeQuery(command)
+
 
 def consultaEstoriasProjeto(id_proejto):
 
@@ -212,8 +215,24 @@ def consultaEstoriasProjeto(id_proejto):
 	command = command.format(a=id_proejto)
 	return executeQuery(command)
 
+
 def consultaProjetosUsuario(id_usuario):
 
 	command = "SELECT p.* FROM projetos p JOIN usuarios_projetos up ON p.id = up.id_projeto WHERE up.id_usuario = {a};"
 	command = command.format(a=id_usuario)
 	return executeQuery(command)
+
+
+def confirmaLogin(nome, senha):
+
+    command = "SELECT * FROM usuarios WHERE nome = '{a}';"
+    command = command.format(a=nome)
+    user = executeQuery(command)
+
+    if len(user) == 0:
+        return False
+
+    if user[0][2] == senha:
+        return True
+    else:
+        return False
