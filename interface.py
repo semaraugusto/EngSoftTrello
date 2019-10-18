@@ -41,9 +41,11 @@ class Application(tk.Tk):
         frame.tkraise()
 
     def show_projectFrame(self, project_name):
-        print(project_name)
+        print(project_name, )
+        project_id = getById("projetos", project_name[0])
         frame = self.frames[ProjectPage]
-        frame.defineProjectName(project_name)
+        print(project_name, project_id)
+        frame.initializeProject(self, project_id[0][0], project_name[0])
         frame.tkraise()
 
 

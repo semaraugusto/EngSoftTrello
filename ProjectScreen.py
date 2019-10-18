@@ -5,15 +5,20 @@ import random
 from banco import *
 
 class ProjectPage (tk.Frame):
+    project_name = ""
+    project_id = 0
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        self.project_name = "Project Name"
-        label = tk.Label(self, text=self.project_name, font=("Verdana", 12))
+    def initializeProject(self, controller, project_id, project_name):
+        label = tk.Label(self, text=project_name, font=("Verdana", 12))
         label.grid(row=0, column=0, columnspan=8, rowspan=3)
+        self.project_id = project_id
+        self.project_name = project_name
 
-        stories = executeQuery("SELECT nome FROM estorias;")
+        stories = consultaEstoriasProjeto(self.project_id)
+        print(stories)
         tasks = executeQuery("SELECT T.nome FROM estorias E JOIN tarefas T ON E.id = T.id_estoria;")
         doing = []
         done = []
@@ -32,14 +37,15 @@ class ProjectPage (tk.Frame):
 
         back_to_home_button = tk.Button(self, text="Back to home", command= lambda: controller.show_initialframe(0))
         back_to_home_button.grid(row=6, column=0, columnspan=6)
-        
+
     def createListBox(self, widged, array, list_name, r, c, prefix, add=True, remove=True):
         array_label = tk.Label(widged, text=list_name)
         array_label.grid(row=r, column=c, columnspan=2)
         array_list = tk.Listbox(widged, width=23, height=30)
         for i in range(len(array)):
             if list_name == "Stories":
-                array_list.insert(i, prefix.format(i) + array[i][0])
+                print(i, prefix.format(i), array[i][0])
+                array_list.insert(i, prefix.format(i) + array[i][2])
                 array_list.bind("<Double-Button-1>",  lambda x: self.storyWindow(array_list.get(tk.ACTIVE), self.getStoryDescription(array_list.get(tk.ACTIVE)), self.getStoryPoints(array_list.get(tk.ACTIVE))))
             elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
                 array_list.insert(i, prefix.format(i) + array[i][3])
@@ -64,13 +70,13 @@ class ProjectPage (tk.Frame):
 
     def getStoryDescription(self, story_name):
         story_name = story_name[story_name.find(":")+2:]
-        story_id = getProjectId("estorias", story_name)
+        story_id = getById("estorias", story_name)
         story = selectAllbyID("estorias", story_id[0][0])
         return story[0][3]
 
     def getStoryPoints(self, story_name):
         story_name = story_name[story_name.find(":")+2:]
-        story_id = getProjectId("estorias", story_name)
+        story_id = getById("estorias", story_name)
         story = selectAllbyID("estorias", story_id[0][0])
         print(story)
         return story[0][4]
@@ -83,7 +89,7 @@ class ProjectPage (tk.Frame):
             list_box = self.list_boxes["Stories"][1]
             list_size = list_box.size() 
             list_box.insert(list_size, "E{}: ".format(list_size) + name)
-            insertEstoria(name, description, 0)
+            insertEstoria(self.project_id, name, description, 0)
             name_entry.destroy()
             widget.destroy()
         else:
@@ -123,7 +129,7 @@ class ProjectPage (tk.Frame):
             if(list_selected.get(i) == story_selected):
                 list_selected.delete(i)
                 break
-        story_id = getProjectId("estorias", story_selected[story_selected.find(":")+2:])[0][0]
+        story_id = getById("estorias", story_selected[story_selected.find(":")+2:])[0][0]
         deleteByID("estorias", story_id)
         widget.destroy()
 
@@ -148,7 +154,7 @@ class ProjectPage (tk.Frame):
         points = points_widget.get()
         description = description_widget.get("1.0", tk.END)
         story_name = story_selected_name[story_selected_name.find(":")+2:]
-        story_id = getProjectId("estorias", story_name)
+        story_id = getById("estorias", story_name)
         print(story_id[0][0], story_name, description, points)
         updateEstoria(story_id[0][0], story_name, description, points)
 

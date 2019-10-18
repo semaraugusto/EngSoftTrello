@@ -78,7 +78,7 @@ class InitialPage(tk.Frame):
             if(self.projects_list_box.get(i)[0] == project_selected[0]):
                 self.projects_list_box.delete(i)
                 break
-        project_id = getProjectId("projetos", project_selected[0])[0][0]
+        project_id = getById("projetos", project_selected[0])[0][0]
         deleteByID("projetos", project_id)
         widget.destroy()
 
