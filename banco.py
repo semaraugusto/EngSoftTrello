@@ -202,7 +202,7 @@ def updateProjeto(id, nome):
     executeNonQuery(command)
 
 
-def getProjectId(tabela, nome):
+def getById(tabela, nome):
     command = "SELECT id FROM {a} WHERE nome = '{b}';"
     command = command.format(a=tabela, b=nome)
     print(command)
@@ -211,7 +211,7 @@ def getProjectId(tabela, nome):
 
 def consultaEstoriasProjeto(id_proejto):
 
-	command = "SELECT * FROM estorias WHERE e.id_proejto = {a};"
+	command = "SELECT * FROM estorias e WHERE e.id_projeto = {a};"
 	command = command.format(a=id_proejto)
 	return executeQuery(command)
 
