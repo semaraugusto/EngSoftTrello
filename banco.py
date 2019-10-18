@@ -140,7 +140,7 @@ def updateEstoria(id, nome, descricao, story_points):
     executeNonQuery(command)
 
 
-def insertTarefa(id_estoria, nome, descricao, done, comments):
+def insertTarefa(id_estoria, nome, descricao, done):
     global proxTarefaID
 
     if id_equipe is None:
@@ -148,8 +148,8 @@ def insertTarefa(id_estoria, nome, descricao, done, comments):
     if comments is None:
         comments = ""
 		
-    command = "INSERT INTO tarefas(id_estoria, nome, descricao, comments, done) VALUES ({a}, '{b}', '{c}', '{d}', {e});"
-    command = command.format(a=id_estoria, b=nome, c=descricao, d=comments, e=done)
+    command = "INSERT INTO tarefas(id_estoria, nome, descricao,done) VALUES ({a}, '{b}', '{c}', {d});"
+    command = command.format(a=id_estoria, b=nome, c=descricao, d=done)
     executeNonQuery(command)
 
     proxTarefaID = proxTarefaID + 1
