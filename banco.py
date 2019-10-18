@@ -209,11 +209,17 @@ def getById(tabela, nome):
     return executeQuery(command)
 
 
-def consultaEstoriasProjeto(id_proejto):
+def consultaEstoriasProjeto(id_projeto):
 
 	command = "SELECT * FROM estorias e WHERE e.id_projeto = {a};"
-	command = command.format(a=id_proejto)
+	command = command.format(a=id_projeto)
 	return executeQuery(command)
+
+def consultaTarefasEstorias(id_estoria):
+	command = "SELECT * FROM tarefas t WHERE t.id_estoria = {a};"
+	command = command.format(a=id_estoria)
+	return executeQuery(command)
+
 
 
 def consultaProjetosUsuario(id_usuario):
