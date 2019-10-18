@@ -111,7 +111,6 @@ def deleteByID(tabela, id):
     command = command.format(a=tabela, b=id)
     executeNonQuery(command)
 
-
 def inicializaBanco():
     global conexao, proxEstoriaID, proxTarefaID, proxUsuarioID, proxEquipeID
 
@@ -185,14 +184,14 @@ def updateUsuario(id, nome):
     executeNonQuery(command)
 
 
-def insertProjeto(id_equipe, nome):
-    global proxUsuarioID
+def insertProjeto(nome):
+    global proxProjetoID
 
     command = "INSERT INTO projetos(nome) VALUES ('{a}');"
     command = command.format(a=nome)
     executeNonQuery(command)
 
-    proxUsuarioID = proxUsuarioID + 1
+    proxProjetoID += 1
 
 
 def updateProjeto(id, nome):
@@ -201,6 +200,11 @@ def updateProjeto(id, nome):
     command = command.format(a=nome, b=id)
     executeNonQuery(command)
 
+def getProjectId(tabela, nome):
+    command = "SELECT id FROM {a} WHERE nome = '{b}';"
+    command = command.format(a=tabela, b=nome)
+    print(command)
+    return executeQuery(command)
 
 def consultaEstoriasProjeto(id_proejto):
 

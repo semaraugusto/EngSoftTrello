@@ -16,9 +16,7 @@ class InitialPage(tk.Frame):
 
         # getting the projects avaiable
         # self.projects = ["AEDSII-TP1", "COMPILADORESI-TP2", "ENGSOFT-TP3", "OCII-TP0"]
-        
         self.projects = executeQuery("SELECT nome FROM projetos;")
-        print (self.projects)
 
         # options visual configurations
         self.options_brightness = "White"
@@ -47,24 +45,21 @@ class InitialPage(tk.Frame):
         self.options_count += 1
 
     # get the new project data given by the user, and 
-    def getSubmited(self, widget, name_entry, description_entry):
+    def getSubmitedProject(self, widget, name_entry):
         name = name_entry.get()
-        description = description_entry.get()
 
-        if name != "" and description != "":
-            # addProjectInDataBase()
-            # updateInterfaceData()
+        if name != "":
+            insertProjeto(name)
+            self.projects_list_box.insert(self.projects_list_box.size(), name)
             name_entry.destroy()
-            description_entry.destroy()
             widget.destroy()
         else:
             # popup an error message and keeps the window open
             Errorlabel = tk.Label(widget, text="Name or description not given", background="red", fg="white")
             Errorlabel.grid(row=2,column=0)
 
-    def cancelSubmited(self, widget, name_entry, description_entry):
+    def cancelSubmitedProject(self, widget, name_entry):
         name_entry.destroy()
-        description_entry.destroy()
         widget.destroy()
 
     # Create the new project window popup to get the new project data
@@ -77,21 +72,19 @@ class InitialPage(tk.Frame):
         name_entry = tk.Entry(win)
         name_entry.grid(row=0, column=1)
 
-
-        label= tk.Label(win, text="Description", font=10)
-        label.grid(row=1)
-        description_entry = tk.Entry(win)
-        description_entry.grid(row=1, column=1)
-
-        submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmited(win, name_entry, description_entry))
+        submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmitedProject(win, name_entry))
         submit_button.grid(row=2, column=1)
 
-        submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmited(win, name_entry, description_entry))
+        submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedProject(win, name_entry))
         submit_button.grid(row=2, column=2)
 
     def deleteYesButton(self, widget, project_selected):
-        # deleteProjectInDataBase()
-        # updateInterfaceData()
+        for i in range(self.projects_list_box.size()):
+            if(self.projects_list_box.get(i)[0] == project_selected[0]):
+                self.projects_list_box.delete(i)
+                break
+        project_id = getProjectId("projetos", project_selected[0])[0][0]
+        deleteByID("projetos", project_id)
         widget.destroy()
 
     def deleteNoButton(self, widget):
@@ -103,6 +96,7 @@ class InitialPage(tk.Frame):
         win.wm_title("Window")
 
         project_selected = self.projects_list_box.get(tk.ACTIVE)
+        print(project_selected)
         label= tk.Label(win, text="Are you sure you want to delete '{}' ?".format(project_selected),font=10)
         label.grid(row=0)
 
