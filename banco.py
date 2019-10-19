@@ -1,4 +1,5 @@
 import sqlite3
+import security
 
 conexao = None
 proxEstoriaID = 0
@@ -7,32 +8,32 @@ proxUsuarioID = 0
 proxProjetoID = 0
 
 tabelaEstorias = """CREATE TABLE IF NOT EXISTS estorias (
-					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					id_projeto INTEGER,
-					nome TEXT,
-					descricao TEXT,
-					story_points INTEGER);"""
+                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        id_projeto INTEGER,
+                                        nome TEXT,
+                                        descricao TEXT,
+                                        story_points INTEGER);"""
 
 tabelaTarefas = """CREATE TABLE IF NOT EXISTS tarefas (
-					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					id_estoria INTEGER,
-					nome TEXT,
-					descricao TEXT,
-					done BOOLEAN);"""
+                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        id_estoria INTEGER,
+                                        nome TEXT,
+                                        descricao TEXT,
+                                        done BOOLEAN);"""
 
 tabelaUsuarios = """CREATE TABLE IF NOT EXISTS usuarios (
-					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					nome TEXT UNIQUE,
-                    senha TEXT)"""
+                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        nome TEXT UNIQUE,
+                                        senha TEXT)"""
 
 tabelaProjetos = """CREATE TABLE IF NOT EXISTS projetos (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					nome TEXT)"""
 
 tabelaUsuariosProjetos = """CREATE TABLE IF NOT EXISTS usuarios_projetos (
-							id_usuario INTEGER ,
-							id_projeto INTEGER ,
-                            PRIMARY KEY (id_usuario, id_projeto))"""
+                                                        id_usuario INTEGER ,
+                                                        id_projeto INTEGER ,
+                                        PRIMARY KEY (id_usuario, id_projeto))"""
 
 
 def createTables():
@@ -167,6 +168,7 @@ def updateTarefa(id, id_estoria, nome, descricao, done, comments):
 
 def insertUsuario(nome, senha):
     global proxUsuarioID
+    senha = security.criptografaSenha(senha)
 
     command = "INSERT INTO usuarios(nome, senha) VALUES ('{a}', '{b}');"
     command = command.format(a=nome, b=senha)
@@ -207,7 +209,6 @@ def getById(tabela, nome):
 
 
 def consultaEstoriasProjeto(id_projeto):
-
 	command = "SELECT * FROM estorias e WHERE e.id_projeto = {a};"
 	command = command.format(a=id_projeto)
 	return executeQuery(command)
@@ -219,7 +220,6 @@ def consultaTarefasEstorias(id_estoria):
 
 
 def consultaProjetosUsuario(id_usuario):
-
 	command = "SELECT p.* FROM projetos p JOIN usuarios_projetos up ON p.id = up.id_projeto WHERE up.id_usuario = {a};"
 	command = command.format(a=id_usuario)
 	return executeQuery(command)
@@ -234,7 +234,11 @@ def confirmaLogin(nome, senha):
     if len(user) == 0:
         return False
 
-    if user[0][2] == senha:
+    if security.verificaSenha(user[0][2], senha):
         return True
-    else:
-        return False
+
+    return False
+    # if user[0][2] == senha:
+    #     return True
+    # else:
+    #     return False
