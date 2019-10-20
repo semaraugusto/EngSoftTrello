@@ -56,18 +56,18 @@ class ProjectPage (tk.Frame):
 
         if add:
             if(list_name == "Stories"):
-                add_button = tk.Button(widged, text="Add", width=4, command= lambda: self.createNewStory())
+                add_button = tk.Button(widged, text="Add", width=6, command= lambda: self.createNewStory())
                 add_button.grid(row=r+2, column=c)
             elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
-                add_button = tk.Button(widged, text="Add", width=4, command= lambda: self.createNewTask())
+                add_button = tk.Button(widged, text="Add", width=6, command= lambda: self.createNewTask())
                 add_button.grid(row=r+2, column=c)
 
         if remove:
             if(list_name == "Stories"):
-                remove_button = tk.Button(widged, text="Remove", width=4, command= lambda: self.deleteStory())
+                remove_button = tk.Button(widged, text="Remove", width=6, command= lambda: self.deleteStory())
                 remove_button.grid(row=r+2, column=c+1)
             elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
-                remove_button = tk.Button(widged, text="Remove", width=4, command= lambda: self.deleteTask())
+                remove_button = tk.Button(widged, text="Remove", width=6, command= lambda: self.deleteTask())
                 remove_button.grid(row=r+2, column=c+1)
 
         self.list_boxes[list_name] = [array_label, array_list, add_button, remove_button]

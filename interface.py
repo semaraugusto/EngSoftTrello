@@ -49,5 +49,5 @@ class Application(tk.Tk):
 
 
 app = Application()
-app.geometry("800x600")
+app.geometry("850x600")
 app.mainloop()
