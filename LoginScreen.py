@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter import font  as tkfont
 import random
 from banco import *
+import security
 from InitialScreen import InitialPage
 
 class LoginPage(tk.Frame):
@@ -42,7 +43,7 @@ class LoginPage(tk.Frame):
         login = name_entry.get()
         password = description_entry.get()
         if login != "" and password != "":
-            print(login, password)
+            print(login, password, security.criptografaSenha(password))
             if not confirmaLogin(login, password):
                 Errorlabel.destroy()
                 Errorlabel = tk.Label(widget, text="Invalid login or password", background="red", fg="white")

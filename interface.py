@@ -22,7 +22,6 @@ class Application(tk.Tk):
         self.frames = {}
 
         for F in [LoginPage ,InitialPage, ProjectPage]:
-
             frame = F(container, self)
 
             self.frames[F] = frame

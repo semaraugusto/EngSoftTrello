@@ -17,7 +17,7 @@ class InitialPage(tk.Frame):
         # getting the projects avaiable
         self.projects = executeQuery("SELECT nome FROM projetos;")
 
-        self.options_brightness = "White"
+        self.options_brightness = "Black"
         self.options_colour = "#0A6450"
         self.options_count = 0
 
