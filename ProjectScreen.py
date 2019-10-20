@@ -89,14 +89,19 @@ class ProjectPage (tk.Frame):
         return story[0][4]
 
     # get the new story data given by the user, and 
-    def getSubmitedStory(self, widget, name_entry, description_entry):
+    def getSubmitedStory(self, widget, name_entry, description_entry, sp_entry=None):
         name = name_entry.get()
+        if sp_entry is not None:
+            story_points = sp_entry.get()
+        else:
+            story_points = 0
+
         description = description_entry.get("1.0", tk.END)
         if name != "":
             list_box = self.list_boxes["Stories"][1]
             list_size = list_box.size() 
             list_box.insert(list_size, "E{}: ".format(list_size) + name)
-            insertEstoria(self.project_id, name, description, 0)
+            insertEstoria(self.project_id, name, description, story_points)
             name_entry.destroy()
             widget.destroy()
         else:
@@ -104,32 +109,59 @@ class ProjectPage (tk.Frame):
             Errorlabel = tk.Label(widget, text="description not given", background="red", fg="white")
             Errorlabel.grid(row=2,column=0)
 
-    def cancelSubmitedStory(self, widget, name_entry, description_entry):
+    def cancelSubmitedStory(self, widget, name_entry, description_entry, sp_entry=None):
         name_entry.destroy()
         description_entry.destroy()
         widget.destroy()
+        if sp_entry is not None:
+            sp_entry.destroy()
+
 
     # Create the new story window popup to get the new project data
+    # def createNewStory(self):
+    #     win = tk.Toplevel()
+    #     win.wm_title("Window")
+    #
+    #     label= tk.Label(win, text="Story name: ", font=10)
+    #     label.grid(row=0)
+    #     name_entry = tk.Entry(win)
+    #     name_entry.grid(row=0, column=1)
+    #
+    #     label = tk.Label(win, text="Description: ", font=10)
+    #     label.grid(row=1)
+    #     description_entry = tk.Text(win)
+    #     description_entry.grid(row=1, column=1)
+    #
+    #     submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmitedStory(win, name_entry, description_entry))
+    #     submit_button.grid(row=2, column=0)
+    #
+    #     submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedStory(win, name_entry, description_entry))
+    #     submit_button.grid(row=2, column=1)
+
     def createNewStory(self):
         win = tk.Toplevel()
         win.wm_title("Window")
 
-
-        label= tk.Label(win, text="Story name: ",font=10)
+        label = tk.Label(win, text="Story name: ", font=10)
         label.grid(row=0)
         name_entry = tk.Entry(win)
         name_entry.grid(row=0, column=1)
 
-        label = tk.Label(win, text="Description: ",font=10)
+        label = tk.Label(win, text="Story points: ", font=10)
         label.grid(row=1)
+        sp_entry = tk.Entry(win)
+        sp_entry.grid(row=1, column=1)
+
+        label = tk.Label(win, text="Description: ", font=10)
+        label.grid(row=2)
         description_entry = tk.Text(win)
-        description_entry.grid(row=1, column=1)
+        description_entry.grid(row=2, column=1)
 
-        submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmitedStory(win, name_entry, description_entry))
-        submit_button.grid(row=2, column=0)
+        submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmitedStory(win, name_entry, description_entry, sp_entry))
+        submit_button.grid(row=3, column=0)
 
-        submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedStory(win, name_entry, description_entry))
-        submit_button.grid(row=2, column=1)
+        submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedStory(win, name_entry, description_entry, sp_entry))
+        submit_button.grid(row=3, column=1)
 
     def getStoryIndex(self, story_name):
         for i in range(self.list_boxes["Stories"][1].size()):
@@ -205,9 +237,12 @@ class ProjectPage (tk.Frame):
         submit_button = tk.Button(win, text="Submit", command= lambda: self.getSubmitedTask(win, story_selected, name_entry, description_entry))
         submit_button.grid(row=3, column=0)
 
-        submit_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedStory(win, name_entry, description_entry))
-        submit_button.grid(row=3, column=1)
+        cancel_button = tk.Button(win, text="Cancel", command= lambda: self.cancelSubmitedStory(win, name_entry, description_entry))
+        cancel_button.grid(row=3, column=1)
 
+        card = Canvas(win, width=74, height=97, bg='blue')
+        card.place(x=300, y=600,anchor=CENTER)
+        card.bind("<B1-Motion>", drag)
 
 
     def deleteYesButton(self, widget, list_selected, story_selected):
@@ -272,4 +307,7 @@ class ProjectPage (tk.Frame):
         no_button = tk.Button(win, text="cancel", command= lambda: self.deleteNoButton(win))
         no_button.grid(row=4, column=2)        
 
-        
+       
+def drag(event):
+    event.widget.place(x=event.x_root, y=event.y_root,anchor=CENTER)
+
