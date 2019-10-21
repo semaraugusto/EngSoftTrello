@@ -36,6 +36,10 @@ class Application(tk.Tk):
 
     def show_initialframe(self, user_id):
         frame = self.frames[InitialPage]
+
+        if user_id == 0:
+            user_id = frame.user_id
+
         frame.set_user_id(user_id)
         frame.loadProjects(self)
         frame.tkraise()
