@@ -48,7 +48,7 @@ class ProjectPage (tk.Frame):
             elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
                 print(i, prefix.format(i) ,array)
                 array_list.insert(i, prefix.format(i) + array[i][2])
-                array_list.bind("<Double-Button-1>",  lambda x: self.moveTaskTo(array_list.get(tk.ACTIVE)))
+                array_list.bind("<Double-Button-1>",  lambda x: self.moveTaskTo(array_list.get(tk.ACTIVE), list_name))
                 # array_list.bind("<B1-Motion>",  lambda x: self.move(array_list.get(tk.ACTIVE)))
 
         array_list.grid(row=r+1, column=c, columnspan=3)
@@ -63,7 +63,7 @@ class ProjectPage (tk.Frame):
             elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
                 add_button = tk.Button(widged, text="Add", width=6, command= lambda: self.createNewTask())
                 add_button.grid(row=r+2, column=c)
-                move_button = tk.Button(widged, text="Move To", width=6, command= lambda: self.moveTaskTo(array_list.get(tk.ACTIVE)))
+                move_button = tk.Button(widged, text="Move To", width=6, command= lambda: self.moveTaskTo(array_list.get(tk.ACTIVE), list_name))
                 move_button.grid(row=r+2, column=c+1)
 
         if remove:
@@ -77,7 +77,7 @@ class ProjectPage (tk.Frame):
         self.list_boxes[list_name] = [array_label, array_list, add_button, remove_button]
 
 
-    def moveTaskTo(self, task_name):
+    def moveTaskTo(self, task_name, list_name):
         # try:
         # print(self.getStoryIndex(tk.ACTIVE))
         # print(array_list.get(tk.ACTIVE))
@@ -86,19 +86,41 @@ class ProjectPage (tk.Frame):
         #     print('...')
     # array_list.bind("<B1-Motion>",  lambda x: self.moveTaskTo(array_list.get(tk.ACTIVE), self.getStoryIndex(tk.ACTIVE)));
         win = tk.Toplevel()
-        task_name = task_name.split(':')[1][1:]
+        # task_name = task_name.split(':')[1][1:]
         win.wm_title(f"Move {task_name}")
 
-        array_list = tk.Listbox(win, width=10, height=10)
+        moving_to = tk.Listbox(win, width=10, height=3)
+        moving_to.insert(0, 'Tasks')
+        moving_to.insert(1, 'Doing')
+        moving_to.insert(2, 'Done')
+        moving_to.grid(row=2, column=0, columnspan=2)
 
-        array_list.insert(0, 'Tasks')
-        array_list.insert(1, 'Doing')
-        array_list.insert(2, 'Done')
-
-        array_list.grid(row=4, column=0, columnspan=2)
+        button = tk.Button(win, text='Move', command=lambda: self.moveButton(win, moving_to.get(tk.ACTIVE), task_name, list_name) )
+        button.grid(row=4)
         print(f"HEREEEE =>>>>>>>> {task_name}")
-        task_id = getById("tarefas", task_name)[0][0]
 
+    def moveButton(self, win, moving_to, display_name, list_name):
+        if moving_to == list_name:
+            return
+
+        task_name = display_name.split(':')[1][1:]
+        for i in range(self.list_boxes[list_name][1].size()):
+            if(self.list_boxes[list_name][1].get(i) == task_name):
+                print(self.list_boxes[list_name][1].get(i))
+                self.list_boxes[list_name][1].delete(i)
+                break
+        task_id = getById('tarefas', task_name)[0][0]
+        # deleteById('tarefas', task_id)
+        
+        list_box = self.list_boxes[moving_to][1]
+        list_size = list_box.size()
+        story_id = consultaEstoriaDaTarefa(task_id)[0][0]
+        story = selectAllbyID("estorias", story_id)
+        story_name = story[0][2]
+        list_box.insert(list_size, f"E{self.getStoryIndex(story_name)}/T{list_size}: " + task_name)
+        
+        win.destroy()
+        print(f'Moving from {list_name} to {moving_to}')
 
 
     def defineProjectName(self, project_name):
