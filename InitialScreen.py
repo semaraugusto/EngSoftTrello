@@ -14,9 +14,6 @@ class InitialPage(tk.Frame):
         label = tk.Label(self, width=800, height=600)
         label.pack(pady=10,padx=10)
 
-        # getting the projects avaiable
-        self.projects = executeQuery("SELECT nome FROM projetos;")
-
         self.options_brightness = "Black"
         self.options_colour = "#0A6450"
         self.options_count = 0
@@ -24,6 +21,11 @@ class InitialPage(tk.Frame):
         # creating options avaiable
         self.createOption(self, "Create new project", self.createNewProject)
         self.createOption(self, "Delete project", self.deleteProject)
+
+    def loadProjects(self, controller):
+        command = "SELECT p.nome FROM projetos p JOIN usuarios u ON p.id_equipe = u.id_equipe WHERE u.id = {a};"
+        command = command.format(a=self.user_id)
+        self.projects = executeQuery(command)
 
         # creating the list of projects that the user have
         self.projects_list_box = tk.Listbox(self, width=70, height=35, selectmode=tk.BROWSE)
@@ -44,7 +46,11 @@ class InitialPage(tk.Frame):
         name = name_entry.get()
 
         if name != "":
-            insertProjeto(name)
+            command = "SELECT id_equipe FROM usuarios WHERE id = {a};"
+            command = command.format(a=self.user_id)
+            id_equipe = executeQuery(command)[0][0]
+            insertProjeto(name, id_equipe)
+
             self.projects_list_box.insert(self.projects_list_box.size(), [name])
             name_entry.destroy()
             widget.destroy()
@@ -87,6 +93,7 @@ class InitialPage(tk.Frame):
 
     # Create the delete project window popup
     def deleteProject(self):
+        print("user id: " + user_id)
         win = tk.Toplevel()
         win.wm_title("Window")
 

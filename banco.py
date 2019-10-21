@@ -23,17 +23,23 @@ tabelaTarefas = """CREATE TABLE IF NOT EXISTS tarefas (
 
 tabelaUsuarios = """CREATE TABLE IF NOT EXISTS usuarios (
                                         id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        id_equipe INTEGER,
                                         nome TEXT UNIQUE,
                                         senha TEXT)"""
 
 tabelaProjetos = """CREATE TABLE IF NOT EXISTS projetos (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_equipe INTEGER,
 					nome TEXT)"""
 
 tabelaUsuariosProjetos = """CREATE TABLE IF NOT EXISTS usuarios_projetos (
                                                         id_usuario INTEGER ,
                                                         id_projeto INTEGER ,
                                         PRIMARY KEY (id_usuario, id_projeto))"""
+
+tabelaEquipes = """CREATE TABLE IF NOT EXISTS equipes (
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
+                   nome TEXT UNIQUE)"""
 
 
 def createTables():
@@ -46,6 +52,7 @@ def createTables():
     c.execute(tabelaUsuarios)
     c.execute(tabelaProjetos)
     c.execute(tabelaUsuariosProjetos)
+    c.execute(tabelaEquipes)
 
     conexao.commit()
     c.close()
@@ -97,6 +104,12 @@ def selectAll(tabela):
     command = command.format(a=tabela)
     return executeQuery(command)
 
+
+def selectID(tabela, nome):
+
+    command = "SELECT id FROM {a} WHERE nome = '{b}';"
+    command = command.format(a=tabela, b=nome)
+    return executeQuery(command)
 
 
 def selectAllbyID(tabela, id):
@@ -166,12 +179,14 @@ def updateTarefa(id, id_estoria, nome, descricao, done, comments):
 	executeNonQuery(command)
 
 
-def insertUsuario(nome, senha):
+def insertUsuario(nome, senha, id_equipe):
     global proxUsuarioID
     senha = security.criptografaSenha(senha)
+    if id_equipe == 0:
+        id_equipe = "null"
 
-    command = "INSERT INTO usuarios(nome, senha) VALUES ('{a}', '{b}');"
-    command = command.format(a=nome, b=senha)
+    command = "INSERT INTO usuarios(nome, senha, id_equipe) VALUES ('{a}', '{b}', {c});"
+    command = command.format(a=nome, b=senha, c=id_equipe)
     executeNonQuery(command)
 
     proxUsuarioID = proxUsuarioID + 1
@@ -184,11 +199,13 @@ def updateUsuario(id, nome):
     executeNonQuery(command)
 
 
-def insertProjeto(nome):
+def insertProjeto(nome, id_equipe):
     global proxProjetoID
+    if id_equipe is None:
+        id_equipe = "null"
 
-    command = "INSERT INTO projetos(nome) VALUES ('{a}');"
-    command = command.format(a=nome)
+    command = "INSERT INTO projetos(nome, id_equipe) VALUES ('{a}', {b});"
+    command = command.format(a=nome, b=id_equipe)
     executeNonQuery(command)
 
     proxProjetoID += 1
@@ -245,7 +262,7 @@ def confirmaLogin(nome, senha):
     if len(user) == 0:
         return False
 
-    if security.verificaSenha(user[0][2], senha):
+    if security.verificaSenha(user[0][3], senha):
         return True
 
     return False
@@ -253,3 +270,17 @@ def confirmaLogin(nome, senha):
     #     return True
     # else:
     #     return False
+
+
+def checaEquipes(equipe):
+
+    command = "SELECT * FROM equipes WHERE nome = '{a}';"
+    command = command.format(a=equipe)
+    result = executeQuery(command)
+
+    if len(result) == 0:
+        command = "INSERT INTO equipes(nome) VALUES ('{a}');"
+        command = command.format(a=equipe)
+        executeNonQuery(command)
+
+    return selectID("equipes", equipe)[0][0]
