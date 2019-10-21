@@ -209,20 +209,31 @@ def getById(tabela, nome):
 
 
 def consultaEstoriasProjeto(id_projeto):
-	command = "SELECT * FROM estorias e WHERE e.id_projeto = {a};"
-	command = command.format(a=id_projeto)
-	return executeQuery(command)
+    command = "SELECT * FROM estorias e WHERE e.id_projeto = {a};"
+    command = command.format(a=id_projeto)
+    return executeQuery(command)
 
 def consultaTarefasEstorias(id_estoria):
-	command = "SELECT * FROM tarefas t WHERE t.id_estoria = {a};"
-	command = command.format(a=id_estoria)
-	return executeQuery(command)
+    command = "SELECT * FROM tarefas t WHERE t.id_estoria = {a};"
+    command = command.format(a=id_estoria)
+    return executeQuery(command)
 
+def consultaEstoriaDaTarefa(id):
+    command = "SELECT id_estoria FROM tarefas as t WHERE t.id = {a};"
+    command = command.format(a=id)
+    return executeQuery(command)
+
+# tabelaTarefas = """CREATE TABLE IF NOT EXISTS tarefas (
+#                                         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                                         id_estoria INTEGER,
+#                                         nome TEXT,
+#                                         descricao TEXT,
+#                                         done BOOLEAN);"""
 
 def consultaProjetosUsuario(id_usuario):
-	command = "SELECT p.* FROM projetos p JOIN usuarios_projetos up ON p.id = up.id_projeto WHERE up.id_usuario = {a};"
-	command = command.format(a=id_usuario)
-	return executeQuery(command)
+    command = "SELECT p.* FROM projetos p JOIN usuarios_projetos up ON p.id = up.id_projeto WHERE up.id_usuario = {a};"
+    command = command.format(a=id_usuario)
+    return executeQuery(command)
 
 
 def confirmaLogin(nome, senha):
