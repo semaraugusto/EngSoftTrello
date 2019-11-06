@@ -7,6 +7,8 @@ from banco import *
 class ProjectPage (tk.Frame):
     project_name = ""
     project_id = 0
+    testeEstorias = []
+    testeTarefas = []
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -18,7 +20,7 @@ class ProjectPage (tk.Frame):
         self.project_name = project_name
 
         stories = consultaEstoriasProjeto(self.project_id)
-        print(stories)
+        self.testeEstorias = stories
         tasks = []
         for e in stories:
             task = consultaTarefasEstorias(e[0])
@@ -26,7 +28,7 @@ class ProjectPage (tk.Frame):
                 tasks += task
         doing = []
         done = []
-
+        self.testeTarefas = tasks
         self.list_boxes = {}
 
         self.createListBox(self, stories, "Stories", 3, 0, "E{}: ")
@@ -46,7 +48,6 @@ class ProjectPage (tk.Frame):
                 array_list.insert(i, prefix.format(i) + array[i][2])
                 array_list.bind("<Double-Button-1>",  lambda x: self.storyWindow(array_list.get(tk.ACTIVE), self.getStoryDescription(array_list.get(tk.ACTIVE)), self.getStoryPoints(array_list.get(tk.ACTIVE))))
             elif list_name == "Tasks" or list_name == "Done" or list_name == "Doing":
-                print(i, prefix.format(i) ,array)
                 array_list.insert(i, prefix.format(i) + array[i][2])
                 array_list.bind("<Double-Button-1>",  lambda x: self.moveTaskTo(array_list.get(tk.ACTIVE), list_name))
 
@@ -85,7 +86,7 @@ class ProjectPage (tk.Frame):
 
         win = tk.Toplevel()
         name = task_name.split(':')[1][1:]
-        win.wm_title(f"Moving {name}")
+        win.wm_title("Moving {name}")
 
         moving_to = tk.Listbox(win, width=10, height=3)
         moving_to.insert(0, 'Tasks')
@@ -95,7 +96,6 @@ class ProjectPage (tk.Frame):
 
         button = tk.Button(win, text='Move', command=lambda: self.moveButton(win, moving_to.get(tk.ACTIVE), task_name, list_name) )
         button.grid(row=4)
-        print(f"HEREEEE =>>>>>>>> {task_name}")
 
     def moveButton(self, win, moving_to, display_name, list_name):
         if moving_to == list_name:
@@ -104,19 +104,14 @@ class ProjectPage (tk.Frame):
         task_name = display_name.split(':')[1][1:]
         list_box = self.list_boxes[list_name][1]
 
-        print("BOTAO ATIVADO")
         for i in range(list_box.size()):
-            print(f"{list_box.get(i)} => {task_name}")
             if(list_box.get(i) == display_name):
                 list_box.delete(i)
                 break
 
         list_box = self.list_boxes[moving_to][1]
-        # print(list_box[0])
-        print(list_box.get(0))
         for i in range(self.list_boxes[list_name][1].size()):
             if(self.list_boxes[list_name][1].get(i) == task_name):
-                print(self.list_boxes[list_name][1].get(i))
                 self.list_boxes[list_name][1].delete(i)
                 break
         task_id = getById('tarefas', task_name)[0][0]
@@ -126,11 +121,10 @@ class ProjectPage (tk.Frame):
         story_id = consultaEstoriaDaTarefa(task_id)[0][0]
         story = selectAllbyID("estorias", story_id)
         story_name = story[0][2]
-        list_box.insert(list_size, f"E{self.getStoryIndex(story_name)}/T{list_size}: " + task_name)
+        list_box.insert(list_size, "E{self.getStoryIndex(story_name)}/T{list_size}: " + task_name)
         list_box.bind("<Double-Button-1>",  lambda x: self.moveTaskTo(list_box.get(tk.ACTIVE), moving_to))
         
         win.destroy()
-        print(f'Moving from {list_name} to {moving_to}')
 
 
     def defineProjectName(self, project_name):
@@ -146,7 +140,6 @@ class ProjectPage (tk.Frame):
         story_name = story_name[story_name.find(":")+2:]
         story_id = getById("estorias", story_name)
         story = selectAllbyID("estorias", story_id[0][0])
-        print(story)
         return story[0][4]
 
     # get the new story data given by the user, and 
@@ -220,7 +213,6 @@ class ProjectPage (tk.Frame):
             story_name = story_name[story_name.find(":")+2:]
             story_id = getById("estorias", story_name)
             story = selectAllbyID("estorias", story_id[0][0])
-            print(story, story_id)
             insertTarefa(story_id[0][0], name, description, False)
             name_entry.destroy()
             widget.destroy()
@@ -316,7 +308,6 @@ class ProjectPage (tk.Frame):
         description = description_widget.get("1.0", tk.END)
         story_name = story_selected_name[story_selected_name.find(":")+2:]
         story_id = getById("estorias", story_name)
-        print(story_id[0][0], story_name, description, points)
         updateEstoria(story_id[0][0], story_name, description, points)
 
 
