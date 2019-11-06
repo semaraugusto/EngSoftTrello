@@ -49,7 +49,7 @@ class Estoria():
         self.updateBanco()
 
     def changeName(self,name):
-        self.name = name
+        self.nome = name
         self.updateBanco()
 
     def changeSP(self,sp):
