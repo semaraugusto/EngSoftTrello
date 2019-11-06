@@ -167,15 +167,14 @@ def insertTarefa(id_estoria, nome, descricao, done):
     proxTarefaID = proxTarefaID + 1
 
 
-def updateTarefa(id, id_estoria, nome, descricao, done, comments):
+def updateTarefa(id, id_estoria, nome, descricao, done):
 
-	if id_equipe is None:
-		id_equipe = "null"
-	if comments is None:
-		comments = ""
+    int_done = 0
+    if done:
+        int_done = 1
 
-	command = "UPDATE tarefas SET id_estoria = {a}, nome = '{b}', descricao = '{c}', comments = '{d}', done = {e} WHERE id = {f};"
-	command = command.format(a=id_estoria, b=nome, c=descricao, d=comments, e=done, f=id)
+	command = "UPDATE tarefas SET id_estoria = {a}, nome = '{b}', descricao = '{c}', done = {d} WHERE id = {e};"
+	command = command.format(a=id_estoria, b=nome, c=descricao, d=int_done, e=id)
 	executeNonQuery(command)
 
 
