@@ -173,9 +173,9 @@ def updateTarefa(id, id_estoria, nome, descricao, done):
     if done:
         int_done = 1
 
-	command = "UPDATE tarefas SET id_estoria = {a}, nome = '{b}', descricao = '{c}', done = {d} WHERE id = {e};"
-	command = command.format(a=id_estoria, b=nome, c=descricao, d=int_done, e=id)
-	executeNonQuery(command)
+    command = "UPDATE tarefas SET id_estoria = {a}, nome = '{b}', descricao = '{c}', done = {d} WHERE id = {e};"
+    command = command.format(a=id_estoria, b=nome, c=descricao, d=int_done, e=id)
+    executeNonQuery(command)
 
 
 def insertUsuario(nome, senha, id_equipe):

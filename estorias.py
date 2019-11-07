@@ -8,7 +8,7 @@ class Estoria():
         self.story_points = story_points
         self.id_projeto = id_projeto
 
-        if id is None:
+        if id_estoria is None:
             self.id_estoria = banco.proxEstoriaID
         else:
             self.id_estoria = id_estoria
@@ -16,7 +16,7 @@ class Estoria():
 
     def insertBanco(self):
         try:
-            banco.insertEstoria(self.nome, self.descricao, self.story_points,self.id_projeto)
+            banco.insertEstoria(self.id_projeto, self.nome, self.descricao, self.story_points)
             return True
 
         except Exception as e:
@@ -29,8 +29,7 @@ class Estoria():
                 self.id_estoria,
                 self.nome,
                 self.descricao,
-                self.story_points,
-                self.id_projeto)
+                self.story_points)
             return True
 
         except BaseException:
@@ -57,6 +56,6 @@ class Estoria():
         self.updateBanco()
 
     def getTarefas(self):
-        command = "SELECT T.nome FROM tarefas T JOIN estorias E ON T.id_estoria = E.(a) VALUES ({a});"
+        command = "SELECT T.nome FROM tarefas T JOIN estorias E ON T.id_estoria = E.id;"
         command = command.format(a=self.id_estoria)
-        banco.executeQuery(command)
+        return banco.executeQuery(command)

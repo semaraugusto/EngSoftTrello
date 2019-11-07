@@ -16,22 +16,20 @@ class Tarefa(object):
         self.comments=comments
 
 
-    def insertTarefaBanco(self):
+    def insertBanco(self):
         try:
             banco.insertTarefa(
                 self.id_estoria,
                 self.nome,
                 self.descricao,
-                self.done,
-                self.id_equipe,
-                self.comments)
+                self.done)
             return True
 
         except Exception as e:
             #raise e
             return False
 
-    def updateTarefaBanco(self):
+    def updateBanco(self):
 
         try:
             banco.updateTarefa(
@@ -39,15 +37,13 @@ class Tarefa(object):
                 self.id_estoria,
                 self.nome,
                 self.descricao,
-                self.done,
-                self.id_equipe,
-                self.comments)
+                self.done)
             return True
 
         except BaseException:
             return False
 
-    def deleteTarefaBanco(self):
+    def deleteBanco(self):
 
         try:
             banco.deleteByID("tarefas", self.id_tarefa)
@@ -58,13 +54,13 @@ class Tarefa(object):
 
     def changeDescricao(self,descricao):
         self.descricao = descricao
-        self.updateTarefaBanco()
+        self.updateBanco()
 
     def changeName(self,name):
-        self.name = name
-        self.updateTarefaBanco()
+        self.nome = name
+        self.updateBanco()
 
     def setDone(self,boolean):
         self.done = boolean
-        self.updateTarefaBanco()
+        self.updateBanco()
     
