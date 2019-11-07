@@ -2,30 +2,30 @@ import banco
 
 class Usuario(object):
 
-	def __init__(self, id_equipe , id_usuario ,nome, id = None):
+	def __init__(self, id_equipe, nome, senha, id_usuario = None):
 	
-		if id is None:
-			self.id = banco.proxUsuarioID
+		if id_usuario is None:
+			self.id_usuario = banco.proxUsuarioID
 		else:
-			self.id = id
+			self.id_usuario = id_usuario
 
 		self.id_equipe = id_equipe
-		self.id_usuario = id_usuario
 		self.nome = nome
+		self.senha = senha
 
 
-	def insertUsuarioBanco(self):
+	def insertBanco(self):
 	 
 		try:
 
-			banco.insertUsuario(self.id_usuario, self.nome)
+			banco.insertUsuario(self.nome, self.senha, self.id_equipe)
 			return True
 
 		except  Exception as e:
 			#raise e
 			return False
 
-	def updateUsuarioBanco(self):
+	def updateBanco(self):
 
 		try:
 
@@ -35,7 +35,7 @@ class Usuario(object):
 		except:
 			return False
 
-	def deleteUsuarioBanco(self):
+	def deleteBanco(self):
 		try:
 			
 			banco.deleteUsuario(self.id)
@@ -43,6 +43,6 @@ class Usuario(object):
 		except:
 			return False
 
-	def changeUsuarioName(self,nome):
+	def changeName(self,nome):
 		self.nome = nome
-		self.updateUsuarioBanco()
+		self.updateBanco()

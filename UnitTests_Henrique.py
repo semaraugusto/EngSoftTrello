@@ -2,6 +2,8 @@ import unittest
 import banco
 from estorias import Estoria
 from tarefas import Tarefa
+from projetos import Projeto
+from usuarios import Usuario
 import os
 
 class TestMethods(unittest.TestCase):
@@ -151,34 +153,50 @@ class TestMethods(unittest.TestCase):
 		self.assertTrue(len(returned) == 0)
 
 	#Teste 11
-	def teste_estorias_changeDescricao(self):
+	def teste_banco_consultaEstoriasProjeto(self):
+		p1 = Projeto("p1")
+		p1.insertBanco()
 		e1 = Estoria("e1", "d1", 1)
 		e1.insertBanco()
+		e2 = Estoria("e2", "d2", 1)
+		e2.insertBanco()
 
-		e1.changeDescricao("D1")
+		returned = banco.consultaEstoriasProjeto(p1.id_projeto)
+		expected = [(1, 1, 'e1', 'd1', -1), (2, 1, 'e2', 'd2', -1)]
 
-		returned = banco.selectAll("estorias")
-		self.assertTrue(returned[0][3] == 'D1')
+		self.assertTrue(returned == expected)
 
 	#Teste 12
-	def teste_estorias_changeName(self):
+	def teste_banco_consultaTarefasEstorias(self):
 		e1 = Estoria("e1", "d1", 1)
 		e1.insertBanco()
+		t1 = Tarefa(1, "t1", "d1", False)
+		t1.insertBanco()
+		t2 = Tarefa(1, "t2", "d2", False)
+		t2.insertBanco()
 
-		e1.changeName("E1")
+		returned = banco.consultaTarefasEstorias(e1.id_estoria)
+		expected = [(1, 1, 't1', 'd1', False), (2, 1, 't2', 'd2', False)]
 
-		returned = banco.selectAll("estorias")
-		self.assertTrue(returned[0][2] == 'E1')
+		self.assertTrue(returned == expected)
 
 	#Teste 13
-	def teste_estorias_changeSP(self):
-		e1 = Estoria("e1", "d1", 1)
-		e1.insertBanco()
+	def teste_banco_consultaProjetosUsuario(self):
+		u1 = Usuario(1, 'u1', '123')
+		u1.insertBanco()
+		p1 = Projeto('p1')
+		p1.insertBanco()
+		p2 = Projeto('p2')
+		p2.insertBanco()
 
-		e1.changeSP(8)
+		command = "INSERT INTO usuarios_projetos VALUES (1, 1),(1, 2);"
+		banco.executeNonQuery(command)
 
-		returned = banco.selectAll("estorias")
-		self.assertTrue(returned[0][4] == 8)
+		returned = banco.consultaProjetosUsuario(u1.id_usuario)
+		expected = [(1, None, 'p1'), (2, None, 'p2')]
+
+		self.assertTrue(returned == expected)
+
 
 	#Teste 14
 	def teste_banco_consultaEstoriaDaTarefa(self):

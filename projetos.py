@@ -1,25 +1,26 @@
 import banco
 
 class Projeto():
-    def __init__(self, nome, id_projeto=None):
+    def __init__(self, nome, id_equipe = None, id_projeto=None):
         self.nome = nome
+        self.id_equipe = id_equipe
 
-        if id is None:
+        if id_projeto is None:
             self.id_projeto = banco.proxProjetoID
         else:
             self.id_projeto = id_projeto
 
 
-    def insertProjetoBanco(self):
+    def insertBanco(self):
         try:
-            banco.insertProjeto(self.nome)
+            banco.insertProjeto(self.nome, self.id_equipe)
             return True
 
         except Exception as e:
             #raise e
             return False
 
-    def updateProjetoBanco(self):
+    def updateBanco(self):
         try:
             banco.updateProjeto(
                 self.id_projeto,

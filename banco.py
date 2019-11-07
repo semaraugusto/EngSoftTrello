@@ -126,7 +126,7 @@ def deleteByID(tabela, id):
     executeNonQuery(command)
 
 def inicializaBanco():
-    global conexao, proxEstoriaID, proxTarefaID, proxUsuarioID, proxEquipeID
+    global conexao, proxEstoriaID, proxTarefaID, proxUsuarioID, proxEquipeID, proxProjetoID
 
     conexao = sqlite3.connect('engsoft.db')
     createTables()
