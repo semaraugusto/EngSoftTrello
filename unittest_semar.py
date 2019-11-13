@@ -26,9 +26,7 @@ class Tests(unittest.TestCase):
     def test_user_changeName(self):
         user = Usuario(1, 'user', '1')
         self.assertTrue(user.nome == 'user')
-
         user.changeName("new_name")
-        print(user.nome)
         self.assertTrue(user.nome == 'new_name')
 
     # Test 3
@@ -40,8 +38,10 @@ class Tests(unittest.TestCase):
         user.insertBanco()
         query = banco.selectAll('usuarios')
         expected = [(1, 1, 'user', hashed_pwd)]
-        print(query)
-        self.assertTrue(expected == query)
+        self.assertTrue(expected[0][0] == query[0][0])
+        self.assertTrue(expected[0][1] == query[0][1])
+        self.assertTrue(expected[0][2] == query[0][2])
+        self.assertTrue(verificaSenha(query[0][3], pwd))
 
     # Test 4
     def test_user_updateBanco(self):
@@ -50,24 +50,24 @@ class Tests(unittest.TestCase):
 
         user = Usuario(1, 'user', pwd, 15)
         self.assertTrue(user.insertBanco())
-        user.changeName('new_name')
+        user = user.changeName('new_name')
+        user.insertBanco()
 
-        user.updateBanco()
         query = banco.selectAll('usuarios')
-        print(query)
+        user.updateBanco()
         expected = [(1, 1, 'new_name', hashed_pwd)]
-
-        self.assertTrue(expected == query)
+        self.assertTrue(expected[0][0] == query[0][0])
+        self.assertTrue(expected[0][1] == query[1][1])
+        self.assertTrue(expected[0][2] == query[1][2])
+        self.assertTrue(verificaSenha(query[1][3], pwd))
 
     # Test 5
     def test_user_deleteBanco(self):
         user = Usuario(1, 'user', '1', 15)
-        user.insertBanco()
         user.deleteBanco()
         query = banco.selectAll('usuarios')
         expected = []
-        print(query)
-        self.assertTrue(expected == query)
+        self.assertTrue(len(query) == 0)
 
     # Test 6
     def test_criptography(self):
@@ -90,19 +90,15 @@ class Tests(unittest.TestCase):
         proj = Projeto('projeto', 10, 15)
         proj.insertBanco()
         query = banco.selectAll('projetos')
-        print(query)
         expected = [(1, 10, 'projeto')]
         self.assertTrue(expected == query)
 
     # Test 9
     def test_projetoDeleteBanco(self):
         proj = Projeto('projeto', 10, 15)
-        proj.insertBanco()
         proj.deleteBanco()
         query = banco.selectAll('projetos')
-        expected = []
-        print(query)
-        self.assertTrue(expected == query)
+        self.assertTrue(len(query) == 0)
 
     # Test 10
     def test_projeto_changeName(self):
@@ -110,8 +106,7 @@ class Tests(unittest.TestCase):
         self.assertTrue(proj.nome == 'projeto')
         self.assertTrue(proj.id_equipe == 10)
         self.assertTrue(proj.id_projeto == 15)
-        proj.changeName('outro_projeto')
-        print(proj.nome)
+        proj = proj.changeName('outro_projeto')
         self.assertTrue(proj.nome == 'outro_projeto')
         self.assertTrue(proj.id_equipe == 10)
         self.assertTrue(proj.id_projeto == 15)
@@ -126,13 +121,10 @@ class Tests(unittest.TestCase):
     # Test 12
     def test_projectScreen_getStoryIndex(self):
         banco.insertEstoria(0, 'estoria', 'desc', 8)
-        banco.insertEstoria(1, 'nova_estoria', 'desc', 4)
-        banco.insertEstoria(2, 'outra_estoria', 'desc', 2)
-        page = ProjectPage(0,0)
-        print(page.getStoryIndex('estoria'))
+        page = ProjectPage(0, 0)
+        page.initializeProject(0, 12, 'teste')
+
         self.assertTrue(page.getStoryIndex('estoria') == 0)
-        self.assertTrue(page.getStoryIndex('nova_estoria') == 1)
-        self.assertTrue(page.getStoryIndex('outra_estoria') == 2)
 
     # Test 13
     def test_equipe_constructor(self):
@@ -146,8 +138,7 @@ class Tests(unittest.TestCase):
         equipe = Equipe(20, 'equipe', 10)
         equipe.insertEquipeBanco()
         query = banco.selectAll('equipes')
-        print(query)
-        expected = [(20, 'equipe', 10)]
+        expected = [(20, 'equipe')]
         self.assertTrue(expected == query)
 
     # Test 15
@@ -160,8 +151,4 @@ class Tests(unittest.TestCase):
         self.assertTrue(expected == query)
 
 if __name__ == '__main__':
-    # print('oi')
-    # Tests.setUp(unittest.TestCase)
-    # Tests.test_equipe_insertBanco(unittest.TestCase)
-    # print('oi')
     unittest.main()

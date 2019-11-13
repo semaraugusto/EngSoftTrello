@@ -21,25 +21,21 @@ class Projeto():
             return False
 
     def updateBanco(self): # tiago
-        try:
-            banco.updateProjeto(
-                self.id_projeto,
-                self.nome,
-            )
-            return True
-
-        except BaseException:
-            return False
+        # try:
+        banco.updateProjeto(
+            self.id_projeto,
+            self.nome,
+        )
+        return True
+        #
+        # except BaseException:
+        #     return False
 
     def deleteBanco(self): # semar
-        try:
-            banco.deleteByID("projetos", self.id_projeto)
-            return True
+        banco.deleteByID("projetos", self.id_projeto)
 
-        except BaseException:
-            return False
 
-    def changeName(self,nome): # semar 
+    def changeName(self,nome): # semar
         self.nome = nome
         self.updateBanco()
-
+        return self

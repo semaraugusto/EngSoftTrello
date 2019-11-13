@@ -12,13 +12,13 @@ class Equipe(object):
         self.nome = nome
 
     def insertEquipeBanco(self):
-        try:
-            banco.insertEquipe(self.id_equipe, self.nome)
-            return True
+        # try:
+        banco.insertEquipe(self.id_equipe, self.nome)
+        return True
 
-        except Exception as e:
-            #raise e
-            return False
+        # except Exception as e:
+        #     #raise e
+        #     return False
 
     def updateEquipeBanco(self):
         try:

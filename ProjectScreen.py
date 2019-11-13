@@ -52,7 +52,7 @@ class ProjectPage (tk.Frame):
                 array_list.bind("<Double-Button-1>",  lambda x: self.moveTaskTo(array_list.get(tk.ACTIVE), list_name))
 
         array_list.grid(row=r+1, column=c, columnspan=3)
-        
+
         add_button = None
         remove_button = None
         move_button = None
@@ -116,14 +116,14 @@ class ProjectPage (tk.Frame):
                 break
         task_id = getById('tarefas', task_name)[0][0]
         # deleteById('tarefas', task_id)
-        
+
         list_size = list_box.size()
         story_id = consultaEstoriaDaTarefa(task_id)[0][0]
         story = selectAllbyID("estorias", story_id)
         story_name = story[0][2]
         list_box.insert(list_size, "E{self.getStoryIndex(story_name)}/T{list_size}: " + task_name)
         list_box.bind("<Double-Button-1>",  lambda x: self.moveTaskTo(list_box.get(tk.ACTIVE), moving_to))
-        
+
         win.destroy()
 
 
@@ -142,7 +142,7 @@ class ProjectPage (tk.Frame):
         story = selectAllbyID("estorias", story_id[0][0])
         return story[0][4]
 
-    # get the new story data given by the user, and 
+    # get the new story data given by the user, and
     def getSubmitedStory(self, widget, name_entry, description_entry, sp_entry=None):
         name = name_entry.get()
         if sp_entry is not None:
@@ -153,7 +153,7 @@ class ProjectPage (tk.Frame):
         description = description_entry.get("1.0", tk.END)
         if name != "":
             list_box = self.list_boxes["Stories"][1]
-            list_size = list_box.size() 
+            list_size = list_box.size()
             list_box.insert(list_size, "E{}: ".format(list_size) + name)
             insertEstoria(self.project_id, name, description, story_points)
             name_entry.destroy()
@@ -202,7 +202,7 @@ class ProjectPage (tk.Frame):
                 return i
         return 0
 
-    # get the new story data given by the user, and 
+    # get the new story data given by the user, and
     def getSubmitedTask(self, widget, story_name, name_entry, description_entry):
         name = name_entry.get()
         description = description_entry.get("1.0", tk.END)
@@ -219,7 +219,7 @@ class ProjectPage (tk.Frame):
         else:
             # popup an error message and keeps the window open
             Errorlabel = tk.Label(widget, text="description not given", background="red", fg="white")
-            Errorlabel.grid(row=2,column=0)    
+            Errorlabel.grid(row=2,column=0)
 
     def deleteYesButtonTask(self, widget, list_selected, task_selected):
         for i in range(list_selected.size()):
@@ -302,7 +302,7 @@ class ProjectPage (tk.Frame):
 
         no_button = tk.Button(win, text="no", command= lambda: self.deleteNoButton(win))
         no_button.grid(row=4, column=2)
-        
+
     def changeStory(self, story_selected_name, description_widget, points_widget):
         points = points_widget.get()
         description = description_widget.get("1.0", tk.END)
@@ -317,7 +317,7 @@ class ProjectPage (tk.Frame):
 
         label= tk.Label(win, text="{}".format(story_selected_name),font=10)
         label.grid(row=0, columnspan=3)
-        
+
         description_label = tk.Label(win, text="Story points", font=6)
         description_label.grid(row=1, column=0)
 
@@ -336,7 +336,7 @@ class ProjectPage (tk.Frame):
         yes_button.grid(row=4, column=0)
 
         no_button = tk.Button(win, text="cancel", command= lambda: self.deleteNoButton(win))
-        no_button.grid(row=4, column=2)        
+        no_button.grid(row=4, column=2)
 
 def drag(event):
     event.widget.place(x=event.x_root, y=event.y_root,anchor=CENTER)

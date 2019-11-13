@@ -99,30 +99,31 @@ def countQuery(tabela):
 
 
 def selectAll(tabela):
-
     command = "SELECT * FROM {a};"
     command = command.format(a=tabela)
     return executeQuery(command)
 
 
 def selectID(tabela, nome):
-
     command = "SELECT id FROM {a} WHERE nome = '{b}';"
     command = command.format(a=tabela, b=nome)
     return executeQuery(command)
 
 
 def selectAllbyID(tabela, id):
-
     command = "SELECT * FROM {a} WHERE id = {b};"
     command = command.format(a=tabela, b=id)
     return executeQuery(command)
 
 
 def deleteByID(tabela, id):
-
     command = "DELETE FROM {a} WHERE id = {b};"
     command = command.format(a=tabela, b=id)
+    executeNonQuery(command)
+
+def deleteUsuario(id):
+    command = "DELETE FROM usuarios WHERE id = {a};"
+    command = command.format(a=id)
     executeNonQuery(command)
 
 def inicializaBanco():
@@ -132,6 +133,7 @@ def inicializaBanco():
     createTables()
 
     proxEstoriaID = countQuery('estorias') + 1
+    proxEquipeID = countQuery('equipes') + 1
     proxTarefaID = countQuery('tarefas') + 1
     proxUsuarioID = countQuery('usuarios') + 1
     proxProjetoID = countQuery('projetos') + 1
@@ -178,6 +180,15 @@ def updateTarefa(id, id_estoria, nome, descricao, done):
     executeNonQuery(command)
 
 
+def insertEquipe(id_equipe, nome):
+    global proxEquipeID
+
+    command = "INSERT INTO equipes(id, nome) VALUES ({a}, '{b}');"
+    command = command.format(a=id_equipe, b=nome)
+    executeNonQuery(command)
+
+    proxEquipeID += 1
+
 def insertUsuario(nome, senha, id_equipe):
     global proxUsuarioID
     senha = security.criptografaSenha(senha)
@@ -192,7 +203,6 @@ def insertUsuario(nome, senha, id_equipe):
 
 
 def updateUsuario(id, nome):
-
     command = "UPDATE usuarios SET nome = '{a}' WHERE id = {b};"
     command = command.format(a=nome, b=id)
     executeNonQuery(command)
