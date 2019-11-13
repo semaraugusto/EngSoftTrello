@@ -1,7 +1,7 @@
 import banco
 
 class Projeto():
-    def __init__(self, nome, id_equipe = None, id_projeto=None):
+    def __init__(self, nome, id_equipe = None, id_projeto=None): # semar
         self.nome = nome
         self.id_equipe = id_equipe
 
@@ -11,7 +11,7 @@ class Projeto():
             self.id_projeto = id_projeto
 
 
-    def insertBanco(self):
+    def insertBanco(self): # semar
         try:
             banco.insertProjeto(self.nome, self.id_equipe)
             return True
@@ -20,7 +20,7 @@ class Projeto():
             #raise e
             return False
 
-    def updateBanco(self):
+    def updateBanco(self): # tiago
         try:
             banco.updateProjeto(
                 self.id_projeto,
@@ -31,7 +31,7 @@ class Projeto():
         except BaseException:
             return False
 
-    def deleteBanco(self):
+    def deleteBanco(self): # semar
         try:
             banco.deleteByID("projetos", self.id_projeto)
             return True
@@ -39,7 +39,7 @@ class Projeto():
         except BaseException:
             return False
 
-    def changeName(self,name):
-        self.name = name
+    def changeName(self,nome): # semar 
+        self.nome = nome
         self.updateBanco()
 
