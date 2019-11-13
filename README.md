@@ -44,3 +44,7 @@ Implementaremos um sistema inspirado no Trello
 # Planinha de Apuração de Horas Trabalhadas
 
 https://docs.google.com/spreadsheets/d/1ZDERnxiEVovHCxXZ3s4NCsrBNWd_TaJ4kIdkCQP8f5w/edit?usp=sharing
+
+# Planilha de Apuração de Testes Feitos
+
+https://docs.google.com/spreadsheets/d/1K2QDdKGITtuqcYkG_pSfbvZ4O236W3ENg7yk7_J1uqE/edit?usp=sharing
